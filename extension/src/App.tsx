@@ -1,122 +1,139 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [channel, setChannel] = useState<string | null>(null);
+
+  type ViewingMode = "lite" | "balanced" | "custom";
+  const [mode, setMode] = useState<ViewingMode>("lite");
+  const changeMode = (newMode: ViewingMode) => {
+    setMode(newMode);
+    chrome.storage.sync.set({
+      mode: newMode,
+    });
+  };
+
+  const openTwitchLite = () => {
+    const viewerUrl = `https://twitchlite.app/${channel}?mode=${mode}`;
+    chrome.tabs.create({
+      url: viewerUrl,
+    });
+  };
+
+  useEffect(() => {
+    const loadMode = async () => {
+      const result = await chrome.storage.sync.get("mode");
+      if (
+        result.mode === "lite" ||
+        result.mode === "balanced" ||
+        result.mode === "custom"
+      )
+        setMode(result.mode);
+    };
+    const detectChannel = async () => {
+      if (typeof chrome === "undefined" || !chrome.tabs) {
+        return;
+      }
+      try {
+        const [tab] = await chrome.tabs.query({
+          active: true,
+          currentWindow: true,
+        });
+
+        if (!tab?.url) {
+          return;
+        }
+
+        const url = new URL(tab.url);
+
+        if (url.hostname !== "www.twitch.tv" && url.hostname !== "twitch.tv") {
+          return;
+        }
+
+        const pathParts = url.pathname.split("/").filter(Boolean);
+
+        if (pathParts.length === 0) {
+          return;
+        }
+
+        const possibleChannel = pathParts[0];
+
+        const reservedPages = [
+          "directory",
+          "downloads",
+          "jobs",
+          "p",
+          "settings",
+          "subscriptions",
+          "wallet",
+          "help",
+          "profile",
+          "home",
+        ];
+
+        if (!reservedPages.includes(possibleChannel.toLowerCase())) {
+          setChannel(possibleChannel);
+        }
+      } catch {
+        setChannel(null);
+      }
+    };
+
+    loadMode();
+    detectChannel();
+  }, []);
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
+    <main>
+      <h1>TwitchLite</h1>
+
+      {channel ? (
+        <>
           <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
+            Watching: <strong>{channel}</strong>
           </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
 
-      <div className="ticks"></div>
+          <h3>Viewing Mode</h3>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+          <label>
+            <input
+              type="radio"
+              name="mode"
+              checked={mode === "lite"}
+              onChange={() => changeMode("lite")}
+            />
+            Lite
+          </label>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+          <label>
+            <input
+              type="radio"
+              name="mode"
+              checked={mode === "balanced"}
+              onChange={() => changeMode("balanced")}
+            />
+            Balanced
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="mode"
+              checked={mode === "custom"}
+              onChange={() => changeMode("custom")}
+            />
+            Custom
+          </label>
+
+          <button onClick={openTwitchLite}>Open in TwitchLite</button>
+        </>
+      ) : (
+        <>
+          <p>No Twitch stream detected.</p>
+          <p>Open a Twitch stream to use TwitchLite.</p>
+        </>
+      )}
+    </main>
+  );
 }
-
-export default App
+export default App;

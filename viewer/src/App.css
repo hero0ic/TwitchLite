@@ -1,0 +1,54 @@
+.app {
+  min-height: 100vh;
+}
+
+.viewer {
+  display: flex;
+  height: calc(100vh - 50px);
+  padding: 24px;
+  gap: 24px;
+  box-sizing: border-box;
+}
+
+.video {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+.video iframe {
+  width: 100%;
+  max-width: 1200px;
+  max-height: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+
+.chat {
+  width: 350px;
+  flex-shrink: 0;
+  align-self: stretch;
+}
+
+.chat iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* THEATER MODE */
+
+.viewer.theater {
+  padding: 0;
+  gap: 0;
+}
+
+.viewer.theater .video iframe {
+  max-width: none;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+}
