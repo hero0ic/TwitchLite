@@ -7,5 +7,12 @@
   "action": {
     "default_title": "TwitchLite",
     "default_popup": "index.html"
-  }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.twitch.tv/*"],
+      "js": ["chat-content.js"],
+      "all_frames": true
+    }
+  ]
 }
