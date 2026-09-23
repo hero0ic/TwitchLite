@@ -110,7 +110,7 @@ function App() {
       params.set("quality", customSettings.emoteQuality);
     }
 
-    const viewerUrl = `https://twitch-lite.vercel.app/${channel}?${params.toString()}`;
+    const viewerUrl = `https://twitch-lite.vercel.app/${selectedChannel}?${params.toString()}`;
 
     chrome.tabs.create({
       url: viewerUrl,
