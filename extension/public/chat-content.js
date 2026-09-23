@@ -9,6 +9,36 @@
 
   console.log(`[TwitchLite] Chat detected: ${channel}`);
 
+  const chatParams = new URLSearchParams(window.location.search);
+
+  const mode = chatParams.get("mode") ?? "lite";
+
+  const defaultCustomSettings = {
+    sevenTv: true,
+    bttv: true,
+    ffz: true,
+    emoteQuality: "2x",
+  };
+
+  const settings =
+    mode === "custom"
+      ? customSettings
+      : mode === "lite"
+        ? {
+            sevenTv: chatParams.get("7tv") !== "0",
+            bttv: chatParams.get("bttv") !== "0",
+            ffz: chatParams.get("ffz") !== "0",
+            emoteQuality: chatParams.get("quality") === "1x" ? "1x" : "2x",
+          }
+        : {
+            sevenTv: true,
+            bttv: true,
+            ffz: true,
+            emoteQuality: "2x",
+          };
+
+  console.log("[TwitchLite] Emote settings:", settings);
+
   const emoteMap = new Map();
 
   const normalizeUrl = (url) => {
@@ -30,6 +60,10 @@
     });
   };
 
+  const ffzSize = settings.emoteQuality === "1x" ? "1" : "2";
+  const bttvSize = settings.emoteQuality === "1x" ? "1x" : "2x";
+  const sevenTvSize = settings.emoteQuality === "1x" ? "1x.webp" : "2x.webp";
+
   try {
     const ffzRoomResponse = await fetch(
       `https://api.frankerfacez.com/v1/room/${encodeURIComponent(channel)}`,
@@ -49,166 +83,170 @@
 
     console.log(`[TwitchLite] Twitch ID: ${twitchId}`);
 
-    // ffz global emotes
-    try {
-      const ffzGlobalResponse = await fetch(
-        "https://api.frankerfacez.com/v1/set/global",
-      );
+    // FFZ GLOBAL
+    if (settings.ffz) {
+      try {
+        const ffzGlobalResponse = await fetch(
+          "https://api.frankerfacez.com/v1/set/global",
+        );
 
-      if (ffzGlobalResponse.ok) {
-        const ffzGlobalData = await ffzGlobalResponse.json();
+        if (ffzGlobalResponse.ok) {
+          const ffzGlobalData = await ffzGlobalResponse.json();
 
-        const defaultSets = ffzGlobalData.default_sets ?? [];
+          const defaultSets = ffzGlobalData.default_sets ?? [];
 
-        for (const setId of defaultSets) {
-          const set = ffzGlobalData.sets?.[setId];
+          for (const setId of defaultSets) {
+            const set = ffzGlobalData.sets?.[setId];
 
-          if (!set?.emoticons) continue;
+            if (!set?.emoticons) continue;
 
-          for (const emote of set.emoticons) {
+            for (const emote of set.emoticons) {
+              const url =
+                emote.animated?.[ffzSize] ||
+                emote.urls?.[ffzSize] ||
+                emote.animated?.["1"] ||
+                emote.urls?.["1"];
+
+              addEmote(emote.name, url, "ffz");
+            }
+          }
+        }
+      } catch (error) {
+        console.warn("[TwitchLite] FFZ global emotes failed:", error);
+      }
+
+      // FFZ CHANNEL
+      try {
+        const sets = ffzRoomData.sets ?? {};
+
+        for (const set of Object.values(sets)) {
+          const emotes = set.emoticons ?? [];
+
+          for (const emote of emotes) {
             const url =
-              emote.animated?.["2"] ||
-              emote.urls?.["2"] ||
+              emote.animated?.[ffzSize] ||
+              emote.urls?.[ffzSize] ||
               emote.animated?.["1"] ||
               emote.urls?.["1"];
 
             addEmote(emote.name, url, "ffz");
           }
         }
+      } catch (error) {
+        console.warn("[TwitchLite] FFZ channel emotes failed:", error);
       }
-    } catch (error) {
-      console.warn("[TwitchLite] FFZ global emotes failed:", error);
+    }
+    // BTTV GLOBAL
+    if (settings.bttv) {
+      try {
+        const bttvGlobalResponse = await fetch(
+          "https://api.betterttv.net/3/cached/emotes/global",
+        );
+
+        if (bttvGlobalResponse.ok) {
+          const bttvGlobalData = await bttvGlobalResponse.json();
+
+          for (const emote of bttvGlobalData) {
+            addEmote(
+              emote.code,
+              `https://cdn.betterttv.net/emote/${emote.id}/${bttvSize}`,
+              "bttv",
+            );
+          }
+        }
+      } catch (error) {
+        console.warn("[TwitchLite] BTTV global emotes failed:", error);
+      }
+
+      // BTTV CHANNEL
+      try {
+        const bttvChannelResponse = await fetch(
+          `https://api.betterttv.net/3/cached/users/twitch/${twitchId}`,
+        );
+
+        if (bttvChannelResponse.ok) {
+          const bttvChannelData = await bttvChannelResponse.json();
+
+          const channelEmotes = bttvChannelData.channelEmotes ?? [];
+          const sharedEmotes = bttvChannelData.sharedEmotes ?? [];
+
+          for (const emote of [...channelEmotes, ...sharedEmotes]) {
+            addEmote(
+              emote.code,
+              `https://cdn.betterttv.net/emote/${emote.id}/${bttvSize}`,
+              "bttv",
+            );
+          }
+        }
+      } catch (error) {
+        console.warn("[TwitchLite] BTTV channel emotes failed:", error);
+      }
     }
 
-    // ffz channel emotes
-    try {
-      const sets = ffzRoomData.sets ?? {};
+    // 7TV GLOBAL
+    if (settings.sevenTv) {
+      try {
+        const sevenTvGlobalResponse = await fetch(
+          "https://7tv.io/v3/emote-sets/global",
+        );
 
-      for (const set of Object.values(sets)) {
-        const emotes = set.emoticons ?? [];
+        if (sevenTvGlobalResponse.ok) {
+          const sevenTvGlobalData = await sevenTvGlobalResponse.json();
 
-        for (const emote of emotes) {
-          const url =
-            emote.animated?.["2"] ||
-            emote.urls?.["2"] ||
-            emote.animated?.["1"] ||
-            emote.urls?.["1"];
+          const emotes = sevenTvGlobalData.emotes ?? [];
 
-          addEmote(emote.name, url, "ffz");
+          for (const emote of emotes) {
+            const host = emote.data?.host;
+
+            if (!host?.url || !host?.files) continue;
+
+            const file =
+              host.files.find((file) => file.name === sevenTvSize) ||
+              host.files.find((file) => file.name === "1x.webp") ||
+              host.files[0];
+
+            if (!file) continue;
+
+            const baseUrl = normalizeUrl(host.url);
+
+            addEmote(emote.name, `${baseUrl}/${file.name}`, "7tv");
+          }
         }
+      } catch (error) {
+        console.warn("[TwitchLite] 7TV global emotes failed:", error);
       }
-    } catch (error) {
-      console.warn("[TwitchLite] FFZ channel emotes failed:", error);
-    }
 
-    // bttv global emotes
-    try {
-      const bttvGlobalResponse = await fetch(
-        "https://api.betterttv.net/3/cached/emotes/global",
-      );
+      // 7TV CHANNEL
+      try {
+        const sevenTvChannelResponse = await fetch(
+          `https://7tv.io/v3/users/twitch/${twitchId}`,
+        );
 
-      if (bttvGlobalResponse.ok) {
-        const bttvGlobalData = await bttvGlobalResponse.json();
+        if (sevenTvChannelResponse.ok) {
+          const sevenTvChannelData = await sevenTvChannelResponse.json();
 
-        for (const emote of bttvGlobalData) {
-          addEmote(
-            emote.code,
-            `https://cdn.betterttv.net/emote/${emote.id}/2x`,
-            "bttv",
-          );
+          const emotes = sevenTvChannelData.emote_set?.emotes ?? [];
+
+          for (const emote of emotes) {
+            const host = emote.data?.host;
+
+            if (!host?.url || !host?.files) continue;
+
+            const file =
+              host.files.find((file) => file.name === sevenTvSize) ||
+              host.files.find((file) => file.name === "1x.webp") ||
+              host.files[0];
+
+            if (!file) continue;
+
+            const baseUrl = normalizeUrl(host.url);
+
+            addEmote(emote.name, `${baseUrl}/${file.name}`, "7tv");
+          }
         }
+      } catch (error) {
+        console.warn("[TwitchLite] 7TV channel emotes failed:", error);
       }
-    } catch (error) {
-      console.warn("[TwitchLite] BTTV global emotes failed:", error);
-    }
-
-    // bttv channel emotes
-    try {
-      const bttvChannelResponse = await fetch(
-        `https://api.betterttv.net/3/cached/users/twitch/${twitchId}`,
-      );
-
-      if (bttvChannelResponse.ok) {
-        const bttvChannelData = await bttvChannelResponse.json();
-
-        const channelEmotes = bttvChannelData.channelEmotes ?? [];
-
-        const sharedEmotes = bttvChannelData.sharedEmotes ?? [];
-
-        for (const emote of [...channelEmotes, ...sharedEmotes]) {
-          addEmote(
-            emote.code,
-            `https://cdn.betterttv.net/emote/${emote.id}/2x`,
-            "bttv",
-          );
-        }
-      }
-    } catch (error) {
-      console.warn("[TwitchLite] BTTV channel emotes failed:", error);
-    }
-
-    // 7tv global emotes
-    try {
-      const sevenTvGlobalResponse = await fetch(
-        "https://7tv.io/v3/emote-sets/global",
-      );
-
-      if (sevenTvGlobalResponse.ok) {
-        const sevenTvGlobalData = await sevenTvGlobalResponse.json();
-
-        const emotes = sevenTvGlobalData.emotes ?? [];
-
-        for (const emote of emotes) {
-          const host = emote.data?.host;
-
-          if (!host?.url || !host?.files) continue;
-
-          const file =
-            host.files.find((file) => file.name === "2x.webp") ||
-            host.files.find((file) => file.name === "1x.webp") ||
-            host.files[0];
-
-          if (!file) continue;
-
-          const baseUrl = normalizeUrl(host.url);
-
-          addEmote(emote.name, `${baseUrl}/${file.name}`, "7tv");
-        }
-      }
-    } catch (error) {
-      console.warn("[TwitchLite] 7TV global emotes failed:", error);
-    }
-
-    // 7tv channel emotes
-    try {
-      const sevenTvChannelResponse = await fetch(
-        `https://7tv.io/v3/users/twitch/${twitchId}`,
-      );
-
-      if (sevenTvChannelResponse.ok) {
-        const sevenTvChannelData = await sevenTvChannelResponse.json();
-
-        const emotes = sevenTvChannelData.emote_set?.emotes ?? [];
-
-        for (const emote of emotes) {
-          const host = emote.data?.host;
-
-          if (!host?.url || !host?.files) continue;
-
-          const file =
-            host.files.find((file) => file.name === "2x.webp") ||
-            host.files.find((file) => file.name === "1x.webp") ||
-            host.files[0];
-
-          if (!file) continue;
-
-          const baseUrl = normalizeUrl(host.url);
-
-          addEmote(emote.name, `${baseUrl}/${file.name}`, "7tv");
-        }
-      }
-    } catch (error) {
-      console.warn("[TwitchLite] 7TV channel emotes failed:", error);
     }
 
     const providerCounts = {
@@ -222,7 +260,6 @@
     }
 
     console.log("[TwitchLite] Provider counts:", providerCounts);
-
     console.log(`[TwitchLite] Loaded ${emoteMap.size} third-party emotes`);
 
     const style = document.createElement("style");
@@ -305,12 +342,10 @@
       }
     };
 
-    // process current messages
     document
       .querySelectorAll('[data-a-target="chat-line-message"]')
       .forEach(processMessage);
 
-    // watch for future messages
     const observer = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
         for (const addedNode of mutation.addedNodes) {
@@ -342,7 +377,7 @@
       subtree: true,
     });
 
-    console.log("[TwitchLite] 7TV + BTTV + FFZ renderer active");
+    console.log("[TwitchLite] Third-party emote renderer active");
   } catch (error) {
     console.error("[TwitchLite] Emote engine failed:", error);
   }

@@ -10,7 +10,6 @@ type CustomSettings = {
   sevenTv: boolean;
   bttv: boolean;
   ffz: boolean;
-  animatedEmotes: boolean;
   emoteQuality: "1x" | "2x";
 };
 
@@ -21,18 +20,21 @@ const defaultCustomSettings: CustomSettings = {
   sevenTv: true,
   bttv: true,
   ffz: true,
-  animatedEmotes: true,
   emoteQuality: "2x",
 };
 
 function App() {
   const [channel, setChannel] = useState<string | null>(null);
-
   const [mode, setMode] = useState<ViewingMode>("lite");
-
   const [customSettings, setCustomSettings] = useState<CustomSettings>(
     defaultCustomSettings,
   );
+
+  const [manualChannel, setManualChannel] = useState("");
+  const [checkedChannel, setCheckedChannel] = useState<string | null>(null);
+  const [isLive, setIsLive] = useState<boolean | null>(null);
+  const [isChecking, setIsChecking] = useState(false);
+  const [checkError, setCheckError] = useState<string | null>(null);
 
   const changeMode = (newMode: ViewingMode) => {
     setMode(newMode);
@@ -66,6 +68,10 @@ function App() {
       params.set("search", customSettings.showSearch ? "1" : "0");
       params.set("following", customSettings.showFollowing ? "1" : "0");
       params.set("chat", customSettings.showChat ? "1" : "0");
+      params.set("7tv", customSettings.sevenTv ? "1" : "0");
+      params.set("bttv", customSettings.bttv ? "1" : "0");
+      params.set("ffz", customSettings.ffz ? "1" : "0");
+      params.set("quality", customSettings.emoteQuality);
     }
 
     const viewerUrl = `https://twitch-lite.vercel.app/${channel}?${params.toString()}`;
@@ -271,19 +277,6 @@ function App() {
                   }
                 />
                 FFZ emotes
-              </label>
-
-              <label>
-                <input
-                  type="checkbox"
-                  checked={customSettings.animatedEmotes}
-                  onChange={(e) =>
-                    updateCustomSettings({
-                      animatedEmotes: e.target.checked,
-                    })
-                  }
-                />
-                Animated emotes
               </label>
 
               <label>

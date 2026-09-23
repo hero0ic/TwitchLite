@@ -5,6 +5,10 @@ function App() {
   const channel = window.location.pathname.split("/")[1];
   const params = new URLSearchParams(window.location.search);
   const mode = params.get("mode") ?? "lite";
+  const chatParams = new URLSearchParams({
+    parent: window.location.hostname,
+    mode,
+  });
 
   const customSearch = params.get("search") === "1";
   const customFollowing = params.get("following") === "1";
@@ -18,8 +22,15 @@ function App() {
   const showChat =
     mode === "lite" || mode === "balanced" || (mode === "custom" && customChat);
 
+  if (mode === "custom") {
+    chatParams.set("7tv", params.get("7tv") ?? "1");
+    chatParams.set("bttv", params.get("bttv") ?? "1");
+    chatParams.set("ffz", params.get("ffz") ?? "1");
+    chatParams.set("quality", params.get("quality") ?? "2x");
+  }
+
   const playerUrl = `https://player.twitch.tv/?channel=${channel}&parent=${window.location.hostname}`;
-  const chatUrl = `https://www.twitch.tv/embed/${channel}/chat?darkpopout&parent=${window.location.hostname}`;
+  const chatUrl = `https://www.twitch.tv/embed/${channel}/chat?darkpopout&parent=${chatParams.toString()}`;
 
   const [theaterMode, setTheaterMode] = useState(false);
 
