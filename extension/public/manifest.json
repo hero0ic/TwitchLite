@@ -14,5 +14,6 @@
       "js": ["chat-content.js"],
       "all_frames": true
     }
-  ]
+  ],
+  "host_permissions": ["https://twitch-lite.vercel.app/*"]
 }

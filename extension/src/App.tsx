@@ -36,6 +36,40 @@ function App() {
   const [isChecking, setIsChecking] = useState(false);
   const [checkError, setCheckError] = useState<string | null>(null);
 
+  const checkManualChannel = async () => {
+    const username = manualChannel.trim().toLowerCase();
+
+    if (!username) return;
+
+    setIsChecking(true);
+    setCheckError(null);
+    setIsLive(null);
+    setCheckedChannel(null);
+
+    try {
+      const response = await fetch(
+        `https://twitch-lite.vercel.app/api/check-live?channel=${encodeURIComponent(username)}`,
+      );
+
+      if (!response.ok) {
+        throw new Error(`Live check failed: ${response.status}`);
+      }
+      const data = await response.json();
+
+      if (data.live) {
+        setCheckedChannel(data.channel);
+        setIsLive(true);
+      } else {
+        setIsLive(false);
+      }
+    } catch (error) {
+      console.error("[TwitchLite] Manual live check failed:", error);
+      setCheckError("Could not check that channel.");
+    } finally {
+      setIsChecking(false);
+    }
+  };
+
   const changeMode = (newMode: ViewingMode) => {
     setMode(newMode);
 
@@ -58,7 +92,9 @@ function App() {
   };
 
   const openTwitchLite = () => {
-    if (!channel) return;
+    const selectedChannel = checkedChannel ?? channel;
+
+    if (!selectedChannel) return;
 
     const params = new URLSearchParams();
 
@@ -155,14 +191,15 @@ function App() {
     detectChannel();
   }, []);
 
+  const selectedChannel = checkedChannel ?? channel;
   return (
     <main>
       <h1>TwitchLite</h1>
 
-      {channel ? (
+      {selectedChannel ? (
         <>
           <p>
-            Watching: <strong>{channel}</strong>
+            Watching: <strong>{selectedChannel}</strong>
           </p>
 
           <h3>Viewing Mode</h3>
@@ -302,6 +339,39 @@ function App() {
         <>
           <p>No Twitch stream detected.</p>
           <p>Open a Twitch stream to use TwitchLite.</p>
+
+          <p className="or-text">OR</p>
+
+          <div className="manual-search">
+            <input
+              type="text"
+              value={manualChannel}
+              onChange={(e) => {
+                setManualChannel(e.target.value);
+                setCheckedChannel(null);
+                setIsLive(null);
+                setCheckError(null);
+              }}
+              placeholder="Enter Twitch username"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  checkManualChannel();
+                }
+              }}
+            />
+
+            <button
+              type="button"
+              onClick={checkManualChannel}
+              disabled={isChecking}
+            >
+              {isChecking ? "Checking..." : "Check Stream"}
+            </button>
+
+            {isLive === false && <p>Streamer is not live.</p>}
+
+            {checkError && <p>{checkError}</p>}
+          </div>
         </>
       )}
     </main>
