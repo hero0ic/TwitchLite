@@ -5,6 +5,172 @@
   overflow: hidden;
 }
 
+.welcome-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.welcome-content {
+  width: 100%;
+  max-width: 700px;
+  text-align: center;
+}
+
+.welcome-content h1 {
+  font-size: 2.8rem;
+  margin-bottom: 12px;
+}
+
+.welcome-content > p {
+  opacity: 0.8;
+  margin-bottom: 36px;
+}
+
+.welcome-steps {
+  display: grid;
+  gap: 12px;
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+.welcome-steps > div {
+  background: #18181b;
+  padding: 18px;
+  border-radius: 8px;
+}
+
+.welcome-steps h3 {
+  margin: 0 0 6px;
+}
+
+.welcome-steps p {
+  margin: 0;
+  opacity: 0.75;
+}
+
+.welcome-options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.welcome-options > div {
+  background: #1f1f23;
+  padding: 14px;
+  border-radius: 6px;
+}
+
+.welcome-options h4 {
+  margin: 0 0 6px;
+}
+
+.welcome-options p {
+  margin: 0;
+  opacity: 0.75;
+}
+
+@media (max-width: 600px) {
+  .welcome-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+.landing-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+
+.landing-content {
+  width: 100%;
+  max-width: 900px;
+  text-align: center;
+}
+
+.landing-content h1 {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.landing-content > p {
+  font-size: 1.1rem;
+  opacity: 0.8;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.landing-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 32px 0 48px;
+}
+
+.primary-button,
+.secondary-button {
+  text-decoration: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.primary-button {
+  background: #9147ff;
+  color: white;
+}
+
+.secondary-button {
+  background: #1f1f23;
+  color: white;
+}
+
+.landing-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  text-align: left;
+}
+
+.landing-features > div {
+  background: #18181b;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.landing-features h3 {
+  margin-top: 0;
+}
+
+.landing-features p {
+  margin-bottom: 0;
+  opacity: 0.75;
+}
+
+.landing-note {
+  margin-top: 40px !important;
+  font-size: 0.85rem !important;
+  opacity: 0.5 !important;
+}
+
+@media (max-width: 700px) {
+  .landing-features {
+    grid-template-columns: 1fr;
+  }
+
+  .landing-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
 .viewer {
   display: flex;
   flex: 1;

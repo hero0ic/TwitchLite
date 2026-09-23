@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
-  const channel = window.location.pathname.split("/")[1];
+  const path = window.location.pathname;
+  const channel = path.split("/")[1];
   const params = new URLSearchParams(window.location.search);
   const mode = params.get("mode") ?? "lite";
   const chatParams = new URLSearchParams({
@@ -194,6 +195,124 @@ function App() {
 
     window.location.href = `/${newChannel}${window.location.search}`;
   };
+
+  if (path === "/welcome") {
+    return (
+      <div className="welcome-page">
+        <div className="welcome-content">
+          <h1>You've successfully installed TwitchLite</h1>
+
+          <p>Thank you for installing TwitchLite.</p>
+
+          <div className="welcome-steps">
+            <div>
+              <h3>1. Pin TwitchLite</h3>
+              <p>
+                Pin the extension to your Chrome toolbar so it's always easy to
+                access.
+              </p>
+            </div>
+
+            <div>
+              <h3>2. Choose how to start</h3>
+
+              <div className="welcome-options">
+                <div>
+                  <h4>Open a Twitch stream</h4>
+                  <p>
+                    Visit any live Twitch channel, then open the TwitchLite
+                    extension.
+                  </p>
+                </div>
+
+                <div>
+                  <h4>Search directly</h4>
+                  <p>
+                    Enter a live Twitch username in the extension without
+                    opening Twitch first.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3>3. Choose your mode</h3>
+              <p>
+                Use Lite, Balanced, or Custom depending on how minimal you want
+                the viewer to be.
+              </p>
+            </div>
+          </div>
+          <a
+            href="https://www.twitch.tv"
+            target="_blank"
+            rel="noreferrer"
+            className="primary-button"
+          >
+            Open Twitch
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  if (!channel) {
+    return (
+      <div className="landing-page">
+        <div className="landing-content">
+          <h1>TwitchLite</h1>
+
+          <p>
+            A lightweight way to watch Twitch with less clutter and lower
+            resource usage.
+          </p>
+
+          <div className="landing-actions">
+            <a href="#" className="primary-button">
+              Install Extension
+            </a>
+
+            <a
+              href="https://github.com/hero0ic/TwitchLite/"
+              target="_blank"
+              rel="noreferrer"
+              className="secondary-button"
+            >
+              View on GitHub
+            </a>
+          </div>
+
+          <div className="landing-features">
+            <div>
+              <h3>Lite Mode</h3>
+              <p>
+                Stream, chat, theater mode, and third-party emotes without the
+                full Twitch interface.
+              </p>
+            </div>
+
+            <div>
+              <h3>Balanced Mode</h3>
+              <p>
+                Adds streamer search and your followed live channels while
+                staying lightweight.
+              </p>
+            </div>
+
+            <div>
+              <h3>Custom Mode</h3>
+              <p>Choose exactly which TwitchLite features you want enabled.</p>
+            </div>
+          </div>
+
+          <p className="landing-note">
+            TwitchLite is an independent project and is not affiliated with
+            Twitch.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (channel && channelStatus === "loading") {
     return (
