@@ -32,6 +32,45 @@ function App() {
   const playerUrl = `https://player.twitch.tv/?channel=${channel}&parent=${window.location.hostname}`;
   const chatUrl = `https://www.twitch.tv/embed/${channel}/chat?darkpopout&parent=${chatParams.toString()}`;
 
+  const [channelStatus, setChannelStatus] = useState<
+    "loading" | "live" | "offline" | "not-found" | "error"
+  >("loading");
+
+  useEffect(() => {
+    const checkChannel = async () => {
+      if (!channel) {
+        return;
+      }
+
+      try {
+        setChannelStatus("loading");
+
+        const response = await fetch(
+          `/api/check-live?channel=${encodeURIComponent(channel)}`,
+        );
+
+        if (!response.ok) {
+          throw new Error(`Status check failed: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (!data.exists) {
+          setChannelStatus("not-found");
+        } else if (!data.live) {
+          setChannelStatus("offline");
+        } else {
+          setChannelStatus("live");
+        }
+      } catch (error) {
+        console.error("[TwitchLite] Channel check failed:", error);
+        setChannelStatus("error");
+      }
+    };
+
+    checkChannel();
+  }, [channel]);
+
   const [theaterMode, setTheaterMode] = useState(false);
 
   type FollowedStream = {
@@ -155,6 +194,52 @@ function App() {
 
     window.location.href = `/${newChannel}${window.location.search}`;
   };
+
+  if (channel && channelStatus === "loading") {
+    return (
+      <div className="status-page">
+        <h1>TwitchLite</h1>
+        <p>Checking channel...</p>
+      </div>
+    );
+  }
+
+  if (channelStatus === "not-found") {
+    return (
+      <div className="status-page">
+        <h1>Channel not found</h1>
+        <p>
+          The Twitch channel <strong>{channel}</strong> does not exist.
+        </p>
+
+        <button onClick={() => (window.location.href = "/")}>Go Home</button>
+      </div>
+    );
+  }
+
+  if (channel && channelStatus === "offline") {
+    return (
+      <div className="status-page">
+        <h1>Streamer is offline</h1>
+        <p>
+          <strong>{channel}</strong> is not currently live.
+        </p>
+
+        <button onClick={() => (window.location.href = "/")}>Go Home</button>
+      </div>
+    );
+  }
+
+  if (channel && channelStatus === "error") {
+    return (
+      <div className="status-page">
+        <h1>Something went wrong</h1>
+        <p>Couldn't check this Twitch channel.</p>
+
+        <button onClick={() => window.location.reload()}>Try Again</button>
+      </div>
+    );
+  }
 
   return (
     <div className={theaterMode ? "app theater-active" : "app"}>
