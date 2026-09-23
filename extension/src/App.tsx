@@ -1,39 +1,105 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
+type ViewingMode = "lite" | "balanced" | "custom";
+
+type CustomSettings = {
+  showSearch: boolean;
+  showFollowing: boolean;
+  showChat: boolean;
+  sevenTv: boolean;
+  bttv: boolean;
+  ffz: boolean;
+  animatedEmotes: boolean;
+  emoteQuality: "1x" | "2x";
+};
+
+const defaultCustomSettings: CustomSettings = {
+  showSearch: true,
+  showFollowing: true,
+  showChat: true,
+  sevenTv: true,
+  bttv: true,
+  ffz: true,
+  animatedEmotes: true,
+  emoteQuality: "2x",
+};
+
 function App() {
   const [channel, setChannel] = useState<string | null>(null);
 
-  type ViewingMode = "lite" | "balanced" | "custom";
   const [mode, setMode] = useState<ViewingMode>("lite");
+
+  const [customSettings, setCustomSettings] = useState<CustomSettings>(
+    defaultCustomSettings,
+  );
+
   const changeMode = (newMode: ViewingMode) => {
     setMode(newMode);
+
     chrome.storage.sync.set({
       mode: newMode,
     });
   };
 
+  const updateCustomSettings = (changes: Partial<CustomSettings>) => {
+    const updatedSettings = {
+      ...customSettings,
+      ...changes,
+    };
+
+    setCustomSettings(updatedSettings);
+
+    chrome.storage.sync.set({
+      customSettings: updatedSettings,
+    });
+  };
+
   const openTwitchLite = () => {
-    const viewerUrl = `https://twitchlite.app/${channel}?mode=${mode}`;
+    if (!channel) return;
+
+    const params = new URLSearchParams();
+
+    params.set("mode", mode);
+
+    if (mode === "custom") {
+      params.set("search", customSettings.showSearch ? "1" : "0");
+      params.set("following", customSettings.showFollowing ? "1" : "0");
+      params.set("chat", customSettings.showChat ? "1" : "0");
+    }
+
+    const viewerUrl = `https://twitch-lite.vercel.app/${channel}?${params.toString()}`;
+
     chrome.tabs.create({
       url: viewerUrl,
     });
   };
 
   useEffect(() => {
-    const loadMode = async () => {
-      const result = await chrome.storage.sync.get("mode");
+    const loadSettings = async () => {
+      const result = await chrome.storage.sync.get(["mode", "customSettings"]);
+
       if (
         result.mode === "lite" ||
         result.mode === "balanced" ||
         result.mode === "custom"
-      )
+      ) {
         setMode(result.mode);
+      }
+
+      if (result.customSettings) {
+        setCustomSettings({
+          ...defaultCustomSettings,
+          ...result.customSettings,
+        });
+      }
     };
+
     const detectChannel = async () => {
       if (typeof chrome === "undefined" || !chrome.tabs) {
         return;
       }
+
       try {
         const [tab] = await chrome.tabs.query({
           active: true,
@@ -79,7 +145,7 @@ function App() {
       }
     };
 
-    loadMode();
+    loadSettings();
     detectChannel();
   }, []);
 
@@ -125,6 +191,118 @@ function App() {
             Custom
           </label>
 
+          {mode === "custom" && (
+            <div className="custom-settings">
+              <h3>Custom Settings</h3>
+
+              <label>
+                <input
+                  type="checkbox"
+                  checked={customSettings.showSearch}
+                  onChange={(e) =>
+                    updateCustomSettings({
+                      showSearch: e.target.checked,
+                    })
+                  }
+                />
+                Search bar
+              </label>
+
+              <label>
+                <input
+                  type="checkbox"
+                  checked={customSettings.showFollowing}
+                  onChange={(e) =>
+                    updateCustomSettings({
+                      showFollowing: e.target.checked,
+                    })
+                  }
+                />
+                Followed channels
+              </label>
+
+              <label>
+                <input
+                  type="checkbox"
+                  checked={customSettings.showChat}
+                  onChange={(e) =>
+                    updateCustomSettings({
+                      showChat: e.target.checked,
+                    })
+                  }
+                />
+                Chat
+              </label>
+
+              <label>
+                <input
+                  type="checkbox"
+                  checked={customSettings.sevenTv}
+                  onChange={(e) =>
+                    updateCustomSettings({
+                      sevenTv: e.target.checked,
+                    })
+                  }
+                />
+                7TV emotes
+              </label>
+
+              <label>
+                <input
+                  type="checkbox"
+                  checked={customSettings.bttv}
+                  onChange={(e) =>
+                    updateCustomSettings({
+                      bttv: e.target.checked,
+                    })
+                  }
+                />
+                BTTV emotes
+              </label>
+
+              <label>
+                <input
+                  type="checkbox"
+                  checked={customSettings.ffz}
+                  onChange={(e) =>
+                    updateCustomSettings({
+                      ffz: e.target.checked,
+                    })
+                  }
+                />
+                FFZ emotes
+              </label>
+
+              <label>
+                <input
+                  type="checkbox"
+                  checked={customSettings.animatedEmotes}
+                  onChange={(e) =>
+                    updateCustomSettings({
+                      animatedEmotes: e.target.checked,
+                    })
+                  }
+                />
+                Animated emotes
+              </label>
+
+              <label>
+                Emote quality
+                <select
+                  value={customSettings.emoteQuality}
+                  onChange={(e) =>
+                    updateCustomSettings({
+                      emoteQuality: e.target.value as "1x" | "2x",
+                    })
+                  }
+                >
+                  <option value="1x">1x — Lower resource usage</option>
+                  <option value="2x">2x — Higher quality</option>
+                </select>
+              </label>
+            </div>
+          )}
+
           <button onClick={openTwitchLite}>Open in TwitchLite</button>
         </>
       ) : (
@@ -136,4 +314,5 @@ function App() {
     </main>
   );
 }
+
 export default App;

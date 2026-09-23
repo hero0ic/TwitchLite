@@ -4,10 +4,19 @@ import "./App.css";
 function App() {
   const channel = window.location.pathname.split("/")[1];
   const params = new URLSearchParams(window.location.search);
-  const mode = params.get("mode");
+  const mode = params.get("mode") ?? "lite";
 
-  const showSearch = mode === "balanced" || mode === "custom";
-  const showFollowing = mode === "balanced" || mode === "custom";
+  const customSearch = params.get("search") === "1";
+  const customFollowing = params.get("following") === "1";
+  const customChat = params.get("chat") === "1";
+
+  const showSearch = mode === "balanced" || (mode === "custom" && customSearch);
+
+  const showFollowing =
+    mode === "balanced" || (mode === "custom" && customFollowing);
+
+  const showChat =
+    mode === "lite" || mode === "balanced" || (mode === "custom" && customChat);
 
   const playerUrl = `https://player.twitch.tv/?channel=${channel}&parent=${window.location.hostname}`;
   const chatUrl = `https://www.twitch.tv/embed/${channel}/chat?darkpopout&parent=${window.location.hostname}`;
@@ -133,7 +142,7 @@ function App() {
 
     if (!newChannel) return;
 
-    window.location.href = `/${newChannel}?mode=${mode}`;
+    window.location.href = `/${newChannel}${window.location.search}`;
   };
 
   return (
@@ -186,7 +195,7 @@ function App() {
                   key={stream.user_id}
                   className="followed-channel"
                   onClick={() => {
-                    window.location.href = `/${stream.user_login}?mode=${mode}`;
+                    window.location.href = `/${stream.user_login}${window.location.search}`;
                   }}
                 >
                   <strong>{stream.user_name}</strong>
@@ -210,9 +219,11 @@ function App() {
             {theaterMode ? "Exit Theater" : "Theater Mode"}
           </button>
         </div>
-        <div className="chat">
-          <iframe src={chatUrl}></iframe>
-        </div>
+        {showChat && (
+          <div className="chat">
+            <iframe src={chatUrl}></iframe>
+          </div>
+        )}
       </div>
     </div>
   );
