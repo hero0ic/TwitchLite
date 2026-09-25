@@ -31,7 +31,7 @@ function App() {
   }
 
   const playerUrl = `https://player.twitch.tv/?channel=${channel}&parent=${window.location.hostname}`;
-  const chatUrl = `https://www.twitch.tv/embed/${channel}/chat?darkpopout&parent=${chatParams.toString()}`;
+  const chatUrl = `https://www.twitch.tv/embed/${channel}/chat?darkpopout&${chatParams.toString()}`;
 
   const [channelStatus, setChannelStatus] = useState<
     "loading" | "live" | "offline" | "not-found" | "error"
