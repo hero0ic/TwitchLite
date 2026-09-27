@@ -1,28 +1,300 @@
 #root {
-  width: 320px;
-  min-height: 220px;
+  width: 340px;
+  min-height: 360px;
+
+  background: #0e0e10;
+  color: #efeff1;
+
+  text-align: center;
 }
 
 main {
-  padding: 20px;
+  padding: 18px;
 }
 
 h1 {
-  margin-top: 0;
+  margin: 0 0 18px;
+
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  align-items: center;
+
+  color: #ffffff;
+}
+
+p {
+  margin: 6px 0;
+  color: #adadb8;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  align-items: center;
 }
 
 label {
-  display: block;
-  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin: 8px 0;
+
+  font-size: 0.85rem;
+  color: #d7d7dc;
+  align-items: center;
 }
 
-input {
-  margin-right: 8px;
+input,
+select,
+button {
+  font: inherit;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  margin: 0;
+
+  accent-color: #9147ff;
+}
+
+.mode-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  margin-top: 10px;
+  margin-bottom: 14px;
+
+  padding: 3px;
+
+  background: #18181b;
+
+  border: 1px solid #2a2a2e;
+  border-radius: 7px;
+}
+
+.mode-option {
+  width: 100%;
+
+  margin: 0;
+  padding: 7px 8px;
+
+  background: transparent;
+  color: #adadb8;
+
+  border: none;
+  border-radius: 5px;
+
+  font-size: 0.78rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+
+.mode-option:hover {
+  background: #222228;
+  color: #efeff1;
+}
+
+.mode-option.active {
+  background: #9147ff;
+  color: #fff;
+}
+
+.mode-option.active:hover {
+  background: #9147ff;
+}
+
+.mode-summary {
+  margin-top: 10px;
+  padding: 10px 12px;
+
+  background: #141417;
+
+  border: 1px solid #242429;
+  border-radius: 6px;
+}
+
+.mode-summary ul {
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  gap: 6px;
+
+  list-style: none;
+}
+
+.mode-summary li {
+  position: relative;
+
+  padding-left: 16px;
+
+  color: #adadb8;
+
+  font-size: 0.76rem;
+  line-height: 1.35;
+}
+
+.mode-summary li::before {
+  content: "✓";
+
+  position: absolute;
+  left: 0;
+
+  color: #a970ff;
+
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.custom-summary {
+  margin: 0;
+
+  color: #adadb8;
+
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.popup-section {
+  padding-top: 14px;
+  margin-top: 14px;
+  border-top: 1px solid #242429;
+}
+
+.or-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 28px 0;
+}
+
+.or-divider::before,
+.or-divider::after {
+  content: "";
+  flex: 1;
+
+  height: 1px;
+  background: #2a2a2e;
+}
+
+.or-divider span {
+  color: #8f8f98;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.manual-search {
+  display: grid;
+  gap: 8px;
+
+  margin-top: 18px;
+}
+
+.manual-search input {
+  width: 100%;
+  box-sizing: border-box;
+
+  margin: 0;
+  padding: 9px 10px;
+
+  background: #18181b;
+  color: #efeff1;
+
+  border: 1px solid #2a2a2e;
+  border-radius: 6px;
+
+  outline: none;
+
+  transition: border-color 120ms ease;
+}
+
+.manual-search input:focus {
+  border-color: #9147ff;
+}
+
+.manual-search input::placeholder {
+  color: #777781;
+}
+
+.manual-search button {
+  margin-top: 0;
+}
+
+h3 {
+  margin: 20px 0 10px;
+
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  color: #8f8f98;
+}
+
+.custom-settings {
+  margin-top: 16px;
+  padding-top: 14px;
+
+  border-top: 1px solid #25252a;
+}
+
+.custom-settings select {
+  margin-left: auto;
+
+  background: #18181b;
+  color: #efeff1;
+
+  border: 1px solid #2a2a2e;
+  border-radius: 5px;
+
+  padding: 5px 7px;
 }
 
 button {
   width: 100%;
-  margin-top: 16px;
-  padding: 10px;
+
+  margin-top: 14px;
+  padding: 9px 12px;
+
+  background: #18181b;
+  color: #efeff1;
+
+  border: 1px solid #303038;
+  border-radius: 6px;
+
   cursor: pointer;
+
+  font-weight: 600;
+
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+button:hover {
+  background: #232329;
+  border-color: #45454d;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.open-button {
+  background: #9147ff;
+  border-color: #9147ff;
+  color: #fff;
+  margin-top: 20px;
+}
+
+.open-button:hover {
+  background: #772ce8;
+  border-color: #772ce8;
 }

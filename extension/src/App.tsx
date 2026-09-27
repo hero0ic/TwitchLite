@@ -202,37 +202,66 @@ function App() {
             Watching: <strong>{selectedChannel}</strong>
           </p>
 
-          <h3>Viewing Mode</h3>
+          <div className="popup-selection">
+            <h3>Viewing Mode</h3>
+          </div>
 
-          <label>
-            <input
-              type="radio"
-              name="mode"
-              checked={mode === "lite"}
-              onChange={() => changeMode("lite")}
-            />
-            Lite
-          </label>
+          <div className="mode-selector">
+            <button
+              type="button"
+              className={mode === "lite" ? "mode-option active" : "mode-option"}
+              onClick={() => changeMode("lite")}
+            >
+              Lite
+            </button>
 
-          <label>
-            <input
-              type="radio"
-              name="mode"
-              checked={mode === "balanced"}
-              onChange={() => changeMode("balanced")}
-            />
-            Balanced
-          </label>
+            <button
+              type="button"
+              className={
+                mode === "balanced" ? "mode-option active" : "mode-option"
+              }
+              onClick={() => changeMode("balanced")}
+            >
+              Balanced
+            </button>
 
-          <label>
-            <input
-              type="radio"
-              name="mode"
-              checked={mode === "custom"}
-              onChange={() => changeMode("custom")}
-            />
-            Custom
-          </label>
+            <button
+              type="button"
+              className={
+                mode === "custom" ? "mode-option active" : "mode-option"
+              }
+              onClick={() => changeMode("custom")}
+            >
+              Custom
+            </button>
+          </div>
+
+          <div className="mode-summary">
+            {mode === "lite" && (
+              <ul>
+                <li>Stream + Chat</li>
+                <li>7TV, BTTV & FFZ</li>
+                <li>1x Emote Quality</li>
+                <li>Lowest resource usage</li>
+              </ul>
+            )}
+
+            {mode === "balanced" && (
+              <ul>
+                <li>Stream + Chat</li>
+                <li>Channel Search</li>
+                <li>Followed Channels</li>
+                <li>7TV, BTTV & FFZ</li>
+                <li>2x Emote Quality</li>
+              </ul>
+            )}
+
+            {mode === "custom" && (
+              <p className="custom-summary">
+                Choose exactly which features you want enabled.
+              </p>
+            )}
+          </div>
 
           {mode === "custom" && (
             <div className="custom-settings">
@@ -333,15 +362,18 @@ function App() {
             </div>
           )}
 
-          <button onClick={openTwitchLite}>Open in TwitchLite</button>
+          <button className="open-button" onClick={openTwitchLite}>
+            Open in TwitchLite
+          </button>
         </>
       ) : (
         <>
           <p>No Twitch stream detected.</p>
           <p>Open a Twitch stream to use TwitchLite.</p>
 
-          <p className="or-text">OR</p>
-
+          <div>
+            <span className="or-divider">OR</span>
+          </div>
           <div className="manual-search">
             <input
               type="text"
