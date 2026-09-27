@@ -500,47 +500,88 @@ function App() {
 
   if (channel && channelStatus === "loading") {
     return (
-      <div className="status-page">
-        <h1>TwitchLite</h1>
-        <p>Checking channel...</p>
-      </div>
+      <main className="status-page">
+        <div className="status-card">
+          <div className="status-icon">
+            <div className="status-spinner" />
+          </div>
+
+          <h1>Checking channel...</h1>
+
+          <p>Making sure this Twitch channel is live.</p>
+        </div>
+      </main>
     );
   }
 
-  if (channelStatus === "not-found") {
+  if (channel && channelStatus === "not-found") {
     return (
-      <div className="status-page">
-        <h1>Channel not found</h1>
-        <p>
-          The Twitch channel <strong>{channel}</strong> does not exist.
-        </p>
+      <main className="status-page">
+        <div className="status-card">
+          <div className="status-icon">?</div>
 
-        <button onClick={() => (window.location.href = "/")}>Go Home</button>
-      </div>
+          <h1>Channel not found</h1>
+
+          <p>
+            The Twitch channel <strong>{channel}</strong> doesn't exist.
+          </p>
+
+          <div className="status-actions">
+            <button
+              className="theater-button"
+              onClick={() => (window.location.href = "/")}
+            >
+              Go Home
+            </button>
+          </div>
+        </div>
+      </main>
     );
   }
 
   if (channel && channelStatus === "offline") {
     return (
-      <div className="status-page">
-        <h1>Streamer is offline</h1>
-        <p>
-          <strong>{channel}</strong> is not currently live.
-        </p>
+      <main className="status-page">
+        <div className="status-card">
+          <h1>Streamer is offline</h1>
 
-        <button onClick={() => (window.location.href = "/")}>Go Home</button>
-      </div>
+          <p>
+            <strong>{channel}</strong> isn't live right now.
+          </p>
+
+          <div className="status-actions">
+            <button
+              className="theater-button"
+              onClick={() => (window.location.href = "/")}
+            >
+              Go Home
+            </button>
+          </div>
+        </div>
+      </main>
     );
   }
 
   if (channel && channelStatus === "error") {
     return (
-      <div className="status-page">
-        <h1>Something went wrong</h1>
-        <p>Couldn't check this Twitch channel.</p>
+      <main className="status-page">
+        <div className="status-card">
+          <div className="status-icon">!</div>
 
-        <button onClick={() => window.location.reload()}>Try Again</button>
-      </div>
+          <h1>Something went wrong</h1>
+
+          <p>We couldn't check this Twitch channel.</p>
+
+          <div className="status-actions">
+            <button
+              className="theater-button"
+              onClick={() => window.location.reload()}
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+      </main>
     );
   }
 

@@ -19,6 +19,7 @@ textarea {
   overflow: hidden;
 }
 
+/* WELCOME PAGE */
 .welcome-page {
   min-height: 100vh;
 
@@ -907,6 +908,89 @@ html {
     animation: none;
   }
 }
+
+/* STATUS PAGES */
+.status-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 32px 20px;
+  box-sizing: border-box;
+
+  background: #0e0e10;
+
+  color: #efeff1;
+}
+
+.status-card {
+  width: 100%;
+  max-width: 460px;
+
+  text-align: center;
+}
+
+.status-icon {
+  width: 52px;
+  height: 52px;
+
+  margin: 0 auto 22px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid #33333a;
+  border-radius: 50%;
+
+  color: #a970ff;
+
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.status-card h1 {
+  margin: 0;
+
+  font-size: clamp(2rem, 5vw, 3rem);
+  letter-spacing: -0.035em;
+}
+
+.status-card p {
+  margin: 14px auto 0;
+  max-width: 380px;
+
+  color: #adadb8;
+
+  line-height: 1.6;
+}
+
+.status-actions {
+  margin-top: 26px;
+
+  display: flex;
+  justify-content: center;
+}
+/* Loading Spinner */
+.status-spinner {
+  width: 24px;
+  height: 24px;
+
+  border: 2px solid #33333a;
+  border-top-color: #9147ff;
+  border-radius: 50%;
+
+  animation: status-spin 0.8s linear infinite;
+}
+
+@keyframes status-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* VIEWER */
 .viewer {
   display: flex;
   flex: 1;
