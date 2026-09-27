@@ -224,61 +224,79 @@ function App() {
 
   if (path === "/welcome") {
     return (
-      <div className="welcome-page">
+      <main className="welcome-page">
         <div className="welcome-content">
-          <h1>You've successfully installed TwitchLite</h1>
+          <p className="section-eyebrow">WELCOME</p>
 
-          <p>Thank you for installing TwitchLite.</p>
+          <h1>TwitchLite is installed.</h1>
+
+          <p className="welcome-description">
+            Thank you for installing TwitchLite. Follow the steps below to get
+            started.
+          </p>
 
           <div className="welcome-steps">
-            <div>
-              <h3>1. Pin TwitchLite</h3>
-              <p>
-                Pin the extension to your Chrome toolbar so it's always easy to
-                access.
-              </p>
-            </div>
+            <section className="welcome-step">
+              <span className="welcome-step-number">01</span>
 
-            <div>
-              <h3>2. Choose how to start</h3>
+              <div>
+                <h3>Pin TwitchLite</h3>
+                <p>
+                  Keep the extension in your Chrome toolbar so it's always easy
+                  to access.
+                </p>
+              </div>
+            </section>
 
-              <div className="welcome-options">
-                <div>
-                  <h4>Open a Twitch stream</h4>
-                  <p>
-                    Visit any live Twitch channel, then open the TwitchLite
-                    extension.
-                  </p>
-                </div>
+            <section className="welcome-step">
+              <span className="welcome-step-number">02</span>
 
-                <div>
-                  <h4>Search directly</h4>
-                  <p>
-                    Enter a live Twitch username in the extension without
-                    opening Twitch first.
-                  </p>
+              <div className="welcome-step-content">
+                <h3>Choose how to start</h3>
+
+                <div className="welcome-options">
+                  <div>
+                    <h4>Open a Twitch stream</h4>
+                    <p>
+                      Visit any live Twitch channel, then open the TwitchLite
+                      extension.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h4>Search directly</h4>
+                    <p>
+                      Enter a live Twitch username in the extension without
+                      opening Twitch first.
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </section>
 
-            <div>
-              <h3>3. Choose your mode</h3>
-              <p>
-                Use Lite, Balanced, or Custom depending on how minimal you want
-                the viewer to be.
-              </p>
-            </div>
+            <section className="welcome-step">
+              <span className="welcome-step-number">03</span>
+
+              <div>
+                <h3>Choose your mode</h3>
+                <p>
+                  Use Lite, Balanced, or Custom depending on how minimal you
+                  want your setup to be.
+                </p>
+              </div>
+            </section>
           </div>
+
           <a
             href="https://www.twitch.tv"
             target="_blank"
             rel="noreferrer"
-            className="primary-button"
+            className="primary-button welcome-cta"
           >
             Open Twitch
           </a>
         </div>
-      </div>
+      </main>
     );
   }
 

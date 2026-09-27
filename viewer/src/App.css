@@ -21,76 +21,134 @@ textarea {
 
 .welcome-page {
   min-height: 100vh;
+
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px 20px;
+
+  padding: 64px 24px;
   box-sizing: border-box;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 100%,
+      rgba(145, 71, 255, 0.1),
+      transparent 38%
+    ),
+    #0e0e10;
+
+  color: #efeff1;
 }
 
 .welcome-content {
   width: 100%;
-  max-width: 700px;
+  max-width: 760px;
+
   text-align: center;
 }
 
 .welcome-content h1 {
-  font-size: 2.8rem;
-  margin-bottom: 12px;
+  margin: 0;
+
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
 }
 
-.welcome-content > p {
-  opacity: 0.8;
-  margin-bottom: 36px;
+.welcome-description {
+  max-width: 560px;
+
+  margin: 18px auto 0;
+
+  color: #adadb8;
+
+  font-size: 1rem;
+  line-height: 1.6;
 }
 
 .welcome-steps {
   display: grid;
   gap: 12px;
+
+  margin-top: 40px;
+
   text-align: left;
-  margin-bottom: 32px;
 }
 
-.welcome-steps > div {
-  background: #18181b;
-  padding: 18px;
-  border-radius: 8px;
+.welcome-step {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 14px;
+
+  padding: 18px 20px;
+
+  background: rgba(24, 24, 27, 0.75);
+
+  border: 1px solid #29292e;
+  border-radius: 10px;
 }
 
-.welcome-steps h3 {
+.welcome-step-number {
+  color: #9147ff;
+
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.welcome-step h3 {
   margin: 0 0 6px;
+
+  font-size: 1rem;
 }
 
-.welcome-steps p {
+.welcome-step p {
   margin: 0;
-  opacity: 0.75;
+
+  color: #adadb8;
+
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
 
 .welcome-options {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 10px;
+
   margin-top: 14px;
 }
 
 .welcome-options > div {
-  background: #1f1f23;
   padding: 14px;
-  border-radius: 6px;
+
+  background: #111114;
+
+  border: 1px solid #2a2a2e;
+  border-radius: 8px;
 }
 
 .welcome-options h4 {
-  margin: 0 0 6px;
+  margin: 0 0 5px;
+
+  font-size: 0.9rem;
 }
 
-.welcome-options p {
-  margin: 0;
-  opacity: 0.75;
+.welcome-cta {
+  margin-top: 28px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
+  .welcome-step {
+    grid-template-columns: 1fr;
+  }
+
   .welcome-options {
     grid-template-columns: 1fr;
+  }
+
+  .welcome-step-number {
+    margin-bottom: -4px;
   }
 }
 
