@@ -19,6 +19,44 @@ textarea {
   overflow: hidden;
 }
 
+@media (max-width: 1100px) {
+  .following-sidebar {
+    width: 170px;
+  }
+
+  .chat-column {
+    width: 280px;
+  }
+}
+
+@media (max-width: 900px) {
+  .following-sidebar {
+    display: none;
+  }
+
+  .chat-column {
+    width: 300px;
+  }
+}
+
+@media (max-width: 700px) {
+  .chat-column {
+    display: none;
+  }
+
+  .video-column {
+    padding: 6px;
+  }
+
+  .top-bar {
+    padding: 0 8px;
+  }
+
+  .form {
+    width: 100%;
+  }
+}
+
 /* WELCOME PAGE */
 .welcome-page {
   min-height: 100vh;
@@ -1154,42 +1192,72 @@ html {
   width: 100%;
 
   display: flex;
-  flex-direction: column;
   align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
 
-  box-sizing: border-box;
-
-  padding: 7px 8px;
-  margin-bottom: 3px;
+  padding: 7px 10px;
 
   background: transparent;
-  color: #efeff1;
-
   border: none;
-  border-radius: 4px;
 
-  cursor: pointer;
+  color: #efeff1;
   text-align: left;
 
-  transition: background-color 120ms ease;
+  cursor: pointer;
 }
 
 .followed-channel:hover {
-  background: #26262c;
+  background: #1f1f23;
 }
 
-.followed-channel strong {
-  line-height: 1.2;
-  font-size: 13px;
+.followed-info {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.followed-info strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 0.82rem;
   font-weight: 600;
   color: #efeff1;
 }
 
-.followed-channel span {
-  line-height: 1.25;
-  font-weight: 400;
-  font-size: 11px;
+.followed-info span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 0.74rem;
   color: #adadb8;
+}
+
+.followed-viewers {
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  margin-top: 2px;
+
+  font-size: 0.74rem;
+  color: #dedee3;
+}
+
+.live-dot {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #eb0400;
 }
 
 /* THEATER MODE */

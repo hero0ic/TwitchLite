@@ -13,22 +13,20 @@
 
   const mode = chatParams.get("mode") ?? "lite";
 
-  const defaultCustomSettings = {
-    sevenTv: true,
-    bttv: true,
-    ffz: true,
-    emoteQuality: "2x",
-  };
-
   const settings =
     mode === "custom"
-      ? customSettings
+      ? {
+          sevenTv: chatParams.get("7tv") !== "0",
+          bttv: chatParams.get("bttv") !== "0",
+          ffz: chatParams.get("ffz") !== "0",
+          emoteQuality: chatParams.get("quality") === "1x" ? "1x" : "2x",
+        }
       : mode === "lite"
         ? {
-            sevenTv: chatParams.get("7tv") !== "0",
-            bttv: chatParams.get("bttv") !== "0",
-            ffz: chatParams.get("ffz") !== "0",
-            emoteQuality: chatParams.get("quality") === "1x" ? "1x" : "2x",
+            sevenTv: true,
+            bttv: true,
+            ffz: true,
+            emoteQuality: "1x",
           }
         : {
             sevenTv: true,

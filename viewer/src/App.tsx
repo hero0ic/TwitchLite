@@ -203,6 +203,18 @@ function App() {
     }
   };
 
+  const formatViewers = (count: number) => {
+    if (count >= 1000000) {
+      return `${(count / 1000000).toFixed(1)}M`;
+    }
+
+    if (count >= 1000) {
+      return `${(count / 1000).toFixed(1)}K`;
+    }
+
+    return count.toString();
+  };
+
   useEffect(() => {
     if (!accessToken) return;
 
@@ -642,9 +654,15 @@ function App() {
                     window.location.href = `/${stream.user_login}${window.location.search}`;
                   }}
                 >
-                  <strong>{stream.user_name}</strong>
-                  <span>{stream.game_name}</span>
-                  <span>{stream.viewer_count.toLocaleString()} viewers</span>
+                  <div className="followed-info">
+                    <strong>{stream.user_name}</strong>
+                    <span>{stream.game_name}</span>
+                  </div>
+
+                  <div className="followed-viewers">
+                    <span className="live-dot" />
+                    <span>{formatViewers(stream.viewer_count)}</span>
+                  </div>
                 </button>
               ))
             )}
