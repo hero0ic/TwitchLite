@@ -2,6 +2,32 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
+  // Landing Page //
+  const [emotesVisible, setEmotesVisible] = useState(false);
+
+  useEffect(() => {
+    const section = document.getElementById("emotes");
+
+    if (!section) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setEmotesVisible(true);
+          observer.disconnect();
+        }
+      },
+      {
+        threshold: 0.35,
+      },
+    );
+
+    observer.observe(section);
+
+    return () => observer.disconnect();
+  }, []);
+  // //
+
   const path = window.location.pathname;
   const channel = path.split("/")[1];
   const params = new URLSearchParams(window.location.search);
@@ -258,59 +284,199 @@ function App() {
 
   if (!channel) {
     return (
-      <div className="landing-page">
-        <div className="landing-content">
-          <h1>TwitchLite</h1>
+      <main className="landing">
+        <section id="top" className="landing-section hero-section">
+          <div className="hero-background">
+            <div className="squares" aria-hidden="true">
+              {Array.from({ length: 10 }).map((_, i) => (
+                <div className="square" key={i} />
+              ))}
+            </div>
+          </div>
 
-          <p>
-            A lightweight way to watch Twitch with less clutter and lower
-            resource usage.
-          </p>
+          <div className="hero-content">
+            <p className="hero-eyebrow">LIGHTWEIGHT TWITCH VIEWER</p>
 
-          <div className="landing-actions">
-            <a href="#" className="primary-button">
-              Install Extension
-            </a>
+            <h1>TwitchLite</h1>
+
+            <p className="hero-description">
+              Watch Twitch with the stream, chat, emotes, and features you want
+              — without the rest of the Twitch interface.
+            </p>
+
+            <div className="landing-actions">
+              <a href="#" className="primary-button">
+                Add to Chrome
+              </a>
+
+              <a
+                href="https://github.com/hero0ic/TwitchLite/"
+                target="_blank"
+                rel="noreferrer"
+                className="secondary-button github-button"
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path
+                    fill="currentColor"
+                    d="M12 2C6.48 2 2 6.58 2 12.23c0 4.52 2.87 8.35 6.84 9.7.5.1.68-.22.68-.49v-1.9c-2.78.62-3.37-1.22-3.37-1.22-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .08 1.53 1.06 1.53 1.06.9 1.57 2.35 1.12 2.92.86.09-.66.35-1.12.64-1.38-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.7 0 0 .84-.28 2.75 1.05A9.3 9.3 0 0 1 12 6.93c.85 0 1.7.12 2.5.35 1.9-1.33 2.74-1.05 2.74-1.05.55 1.4.2 2.44.1 2.7.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.8-4.57 5.05.36.32.68.95.68 1.92v2.85c0 .27.18.59.69.49A10.22 10.22 0 0 0 22 12.23C22 6.58 17.52 2 12 2Z"
+                  />
+                </svg>
+                View on GitHub
+              </a>
+            </div>
+
+            <p className="landing-note">
+              TwitchLite is an independent project and is not affiliated with
+              Twitch.
+            </p>
 
             <a
-              href="https://github.com/hero0ic/TwitchLite/"
-              target="_blank"
-              rel="noreferrer"
-              className="secondary-button"
+              href="#modes"
+              className="section-arrow section-arrow-down"
+              aria-label="Scroll to viewing modes"
             >
-              View on GitHub
+              ↓
             </a>
           </div>
+        </section>
 
-          <div className="landing-features">
-            <div>
-              <h3>Lite Mode</h3>
-              <p>
-                Stream, chat, theater mode, and third-party emotes without the
-                full Twitch interface.
-              </p>
+        <section id="modes" className="landing-section modes-section">
+          <div className="section-content">
+            <a
+              href="#top"
+              className="section-arrow section-arrow-up"
+              aria-label="Back to top"
+            >
+              ↑
+            </a>
+            <p className="section-eyebrow">VIEWING MODES</p>
+
+            <h2>Choose how lightweight you want to go.</h2>
+
+            <p className="section-description">
+              Keep only the essentials, add a few conveniences, or configure
+              TwitchLite exactly how you want it.
+            </p>
+
+            <div className="mode-grid">
+              <article className="mode-card">
+                <span className="mode-number">01</span>
+
+                <h3>Lite</h3>
+
+                <p>
+                  The essentials for watching Twitch with as little memory usage
+                  as possible.
+                </p>
+
+                <ul>
+                  <li>Stream</li>
+                  <li>Chat</li>
+                  <li>Theater mode</li>
+                  <li>7TV, BTTV, and FFZ emotes</li>
+                </ul>
+              </article>
+
+              <article className="mode-card featured-mode">
+                <span className="mode-number">02</span>
+
+                <h3>Balanced</h3>
+
+                <p>
+                  Adds useful Twitch features while keeping the interface clean
+                  and lightweight.
+                </p>
+
+                <ul>
+                  <li>Everything in Lite</li>
+                  <li>Channel search</li>
+                  <li>Followed live channels</li>
+                  <li>Higher-quality emotes</li>
+                </ul>
+              </article>
+
+              <article className="mode-card">
+                <span className="mode-number">03</span>
+
+                <h3>Custom</h3>
+
+                <p>
+                  Decide exactly which TwitchLite features should be enabled.
+                </p>
+
+                <ul>
+                  <li>Toggle search</li>
+                  <li>Toggle followed channels</li>
+                  <li>Toggle chat</li>
+                  <li>Choose emote providers and quality</li>
+                </ul>
+              </article>
             </div>
 
-            <div>
-              <h3>Balanced Mode</h3>
+            <a
+              href="#emotes"
+              className="section-arrow section-arrow-down"
+              aria-label="Scroll to emote support"
+            >
+              ↓
+            </a>
+          </div>
+        </section>
+
+        <section id="emotes" className="landing-section emotes-section">
+          <div className="emotes-layout">
+            <div className="emotes-copy">
+              <a
+                href="#modes"
+                className="section-arrow section-arrow-up"
+                aria-label="Back to viewing modes"
+              >
+                ↑
+              </a>
+              <p className="section-eyebrow">THIRD-PARTY EMOTES</p>
+
+              <h2>Full emote compatibility.</h2>
+
               <p>
-                Adds streamer search and your followed live channels while
-                staying lightweight.
+                TwitchLite supports 7TV, BetterTTV, and FrankerFaceZ while
+                keeping Twitch's normal embedded chat experience.
               </p>
+
+              <div className="provider-list">
+                <span>7TV</span>
+                <span>BTTV</span>
+                <span>FFZ</span>
+              </div>
             </div>
 
-            <div>
-              <h3>Custom Mode</h3>
-              <p>Choose exactly which TwitchLite features you want enabled.</p>
+            <div
+              className={`emote-showcase ${emotesVisible ? "emotes-visible" : ""}`}
+            >
+              <div className="emote-float emote-left-float">
+                <img
+                  src="/emotes/LO.webp"
+                  alt="LO"
+                  className="showcase-emote emote-left"
+                />
+              </div>
+              <div className="emote-float emote-center-float">
+                <img
+                  src="/emotes/EZ.webp"
+                  alt="EZ"
+                  className="showcase-emote emote-center"
+                />
+              </div>
+              <div className="emote-float emote-right-float">
+                <img
+                  src="/emotes/Concerned.webp"
+                  alt="Concerned"
+                  className="showcase-emote emote-right"
+                />
+              </div>
             </div>
           </div>
-
-          <p className="landing-note">
-            TwitchLite is an independent project and is not affiliated with
-            Twitch.
-          </p>
-        </div>
-      </div>
+        </section>
+      </main>
     );
   }
 
@@ -363,37 +529,39 @@ function App() {
   return (
     <div className={theaterMode ? "app theater-active" : "app"}>
       {showSearch && (
-        <form
-          className="form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            searchChannel();
-          }}
-        >
-          <label>
-            <input
-              className="input"
-              type="text"
-              value={searchedChannel}
-              onChange={(e) => setSearchedChannel(e.target.value)}
-              placeholder="Search Twitch channel"
-            />
-            <div className="fancy-bg"></div>
+        <header className="top-bar">
+          <form
+            className="form"
+            onSubmit={(e) => {
+              e.preventDefault();
+              searchChannel();
+            }}
+          >
+            <label>
+              <input
+                className="input"
+                type="text"
+                value={searchedChannel}
+                onChange={(e) => setSearchedChannel(e.target.value)}
+                placeholder="Search Twitch channel"
+              />
+              <div className="fancy-bg"></div>
 
-            <div className="search">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M9.5 3a6.5 6.5 0 1 0 3.98 11.64L19.85 21 21 19.85l-6.36-6.37A6.5 6.5 0 0 0 9.5 3Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z" />
-              </svg>
-            </div>
-            <button
-              className="close-btn"
-              type="button"
-              onClick={() => setSearchedChannel("")}
-            >
-              ×
-            </button>
-          </label>
-        </form>
+              <div className="search">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M9.5 3a6.5 6.5 0 1 0 3.98 11.64L19.85 21 21 19.85l-6.36-6.37A6.5 6.5 0 0 0 9.5 3Zm0 2a4.5 4.5 0 1 1 0 9 4.5 4.5 0 0 1 0-9Z" />
+                </svg>
+              </div>
+              <button
+                className="close-btn"
+                type="button"
+                onClick={() => setSearchedChannel("")}
+              >
+                ×
+              </button>
+            </label>
+          </form>
+        </header>
       )}
       <div className={theaterMode ? "viewer theater" : "viewer"}>
         {showFollowing && !theaterMode && (
@@ -401,7 +569,9 @@ function App() {
             <h3>Followed Channels</h3>
 
             {!accessToken ? (
-              <button onClick={connectTwitch}>Connect Twitch</button>
+              <button className="theater-button" onClick={connectTwitch}>
+                Connect Twitch
+              </button>
             ) : followedStreams.length === 0 ? (
               <p>No followed channels are live.</p>
             ) : (
