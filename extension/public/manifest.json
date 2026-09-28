@@ -15,5 +15,5 @@
       "all_frames": true
     }
   ],
-  "host_permissions": ["https://twitch-lite.vercel.app/*"]
+  "host_permissions": ["https://twitchlite.app/*"]
 }

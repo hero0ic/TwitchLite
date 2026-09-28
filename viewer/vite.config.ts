@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "https://twitch-lite.vercel.app",
+        target: "https://twitchlite.app",
         changeOrigin: true,
         secure: true,
       },

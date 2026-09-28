@@ -48,7 +48,7 @@ function App() {
 
     try {
       const response = await fetch(
-        `https://twitch-lite.vercel.app/api/check-live?channel=${encodeURIComponent(username)}`,
+        `https://twitchlite.app/api/check-live?channel=${encodeURIComponent(username)}`,
       );
 
       if (!response.ok) {
@@ -110,7 +110,7 @@ function App() {
       params.set("quality", customSettings.emoteQuality);
     }
 
-    const viewerUrl = `https://twitch-lite.vercel.app/${selectedChannel}?${params.toString()}`;
+    const viewerUrl = `https://twitchlite.app/${selectedChannel}?${params.toString()}`;
 
     chrome.tabs.create({
       url: viewerUrl,
