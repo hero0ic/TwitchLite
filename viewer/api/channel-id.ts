@@ -41,8 +41,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       throw new Error(`Token request failed: ${tokenResponse.status}`);
     }
 
-    const tokenData = await tokenResponse.json();
+    const tokenData = (await tokenResponse.json()) as {
+      access_token?: string;
+    };
+
     const accessToken = tokenData.access_token;
+
+    if (!accessToken) {
+      throw new Error("Twitch access token missing");
+    }
 
     const userResponse = await fetch(
       `https://api.twitch.tv/helix/users?login=${encodeURIComponent(channel)}`,
@@ -58,7 +65,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       throw new Error(`User lookup failed: ${userResponse.status}`);
     }
 
-    const userData = await userResponse.json();
+    const userData = (await userResponse.json()) as {
+      data?: Array<{
+        id: string;
+        login: string;
+        display_name: string;
+      }>;
+    };
+
     const user = userData.data?.[0];
 
     if (!user) {
