@@ -62,25 +62,29 @@
   const bttvSize = settings.emoteQuality === "1x" ? "1x" : "2x";
   const sevenTvSize = settings.emoteQuality === "1x" ? "1x.webp" : "2x.webp";
 
+  let twitchId = "";
+
   try {
-    const ffzRoomResponse = await fetch(
-      `https://api.frankerfacez.com/v1/room/${encodeURIComponent(channel)}`,
+    const twitchIdResponse = await fetch(
+      `https://twitchlite.app/api/channel-id?channel=${encodeURIComponent(channel)}`,
     );
 
-    if (!ffzRoomResponse.ok) {
-      throw new Error(`FFZ room lookup failed: ${ffzRoomResponse.status}`);
+    if (twitchIdResponse.ok) {
+      const twitchIdData = await twitchIdResponse.json();
+      twitchId = String(twitchIdData.id ?? "");
+    } else {
+      console.warn(
+        `[TwitchLite] Twitch ID lookup failed: ${twitchIdResponse.status}`,
+      );
     }
+  } catch (error) {
+    console.warn("[TwitchLite] Twitch ID lookup failed:", error);
+  }
 
-    const ffzRoomData = await ffzRoomResponse.json();
-
-    const twitchId = String(ffzRoomData.room?.twitch_id ?? "");
-
-    if (!twitchId) {
-      throw new Error("Could not determine Twitch user ID");
-    }
-
+  if (twitchId) {
     console.log(`[TwitchLite] Twitch ID: ${twitchId}`);
-
+  }
+  try {
     // FFZ GLOBAL
     if (settings.ffz) {
       try {
@@ -112,23 +116,33 @@
       } catch (error) {
         console.warn("[TwitchLite] FFZ global emotes failed:", error);
       }
-
       // FFZ CHANNEL
       try {
-        const sets = ffzRoomData.sets ?? {};
+        const ffzRoomResponse = await fetch(
+          `https://api.frankerfacez.com/v1/room/${encodeURIComponent(channel)}`,
+        );
 
-        for (const set of Object.values(sets)) {
-          const emotes = set.emoticons ?? [];
+        if (ffzRoomResponse.ok) {
+          const ffzRoomData = await ffzRoomResponse.json();
+          const sets = ffzRoomData.sets ?? {};
 
-          for (const emote of emotes) {
-            const url =
-              emote.animated?.[ffzSize] ||
-              emote.urls?.[ffzSize] ||
-              emote.animated?.["1"] ||
-              emote.urls?.["1"];
+          for (const set of Object.values(sets)) {
+            const emotes = set.emoticons ?? [];
 
-            addEmote(emote.name, url, "ffz");
+            for (const emote of emotes) {
+              const url =
+                emote.animated?.[ffzSize] ||
+                emote.urls?.[ffzSize] ||
+                emote.animated?.["1"] ||
+                emote.urls?.["1"];
+
+              addEmote(emote.name, url, "ffz");
+            }
           }
+        } else {
+          console.warn(
+            `[TwitchLite] FFZ channel lookup unavailable: ${ffzRoomResponse.status}`,
+          );
         }
       } catch (error) {
         console.warn("[TwitchLite] FFZ channel emotes failed:", error);
@@ -157,27 +171,29 @@
       }
 
       // BTTV CHANNEL
-      try {
-        const bttvChannelResponse = await fetch(
-          `https://api.betterttv.net/3/cached/users/twitch/${twitchId}`,
-        );
+      if (twitchId) {
+        try {
+          const bttvChannelResponse = await fetch(
+            `https://api.betterttv.net/3/cached/users/twitch/${twitchId}`,
+          );
 
-        if (bttvChannelResponse.ok) {
-          const bttvChannelData = await bttvChannelResponse.json();
+          if (bttvChannelResponse.ok) {
+            const bttvChannelData = await bttvChannelResponse.json();
 
-          const channelEmotes = bttvChannelData.channelEmotes ?? [];
-          const sharedEmotes = bttvChannelData.sharedEmotes ?? [];
+            const channelEmotes = bttvChannelData.channelEmotes ?? [];
+            const sharedEmotes = bttvChannelData.sharedEmotes ?? [];
 
-          for (const emote of [...channelEmotes, ...sharedEmotes]) {
-            addEmote(
-              emote.code,
-              `https://cdn.betterttv.net/emote/${emote.id}/${bttvSize}`,
-              "bttv",
-            );
+            for (const emote of [...channelEmotes, ...sharedEmotes]) {
+              addEmote(
+                emote.code,
+                `https://cdn.betterttv.net/emote/${emote.id}/${bttvSize}`,
+                "bttv",
+              );
+            }
           }
+        } catch (error) {
+          console.warn("[TwitchLite] BTTV channel emotes failed:", error);
         }
-      } catch (error) {
-        console.warn("[TwitchLite] BTTV channel emotes failed:", error);
       }
     }
 
@@ -215,38 +231,39 @@
       }
 
       // 7TV CHANNEL
-      try {
-        const sevenTvChannelResponse = await fetch(
-          `https://7tv.io/v3/users/twitch/${twitchId}`,
-        );
+      if (twitchId) {
+        try {
+          const sevenTvChannelResponse = await fetch(
+            `https://7tv.io/v3/users/twitch/${twitchId}`,
+          );
 
-        if (sevenTvChannelResponse.ok) {
-          const sevenTvChannelData = await sevenTvChannelResponse.json();
+          if (sevenTvChannelResponse.ok) {
+            const sevenTvChannelData = await sevenTvChannelResponse.json();
 
-          const emotes = sevenTvChannelData.emote_set?.emotes ?? [];
+            const emotes = sevenTvChannelData.emote_set?.emotes ?? [];
 
-          for (const emote of emotes) {
-            const host = emote.data?.host;
+            for (const emote of emotes) {
+              const host = emote.data?.host;
 
-            if (!host?.url || !host?.files) continue;
+              if (!host?.url || !host?.files) continue;
 
-            const file =
-              host.files.find((file) => file.name === sevenTvSize) ||
-              host.files.find((file) => file.name === "1x.webp") ||
-              host.files[0];
+              const file =
+                host.files.find((file) => file.name === sevenTvSize) ||
+                host.files.find((file) => file.name === "1x.webp") ||
+                host.files[0];
 
-            if (!file) continue;
+              if (!file) continue;
 
-            const baseUrl = normalizeUrl(host.url);
+              const baseUrl = normalizeUrl(host.url);
 
-            addEmote(emote.name, `${baseUrl}/${file.name}`, "7tv");
+              addEmote(emote.name, `${baseUrl}/${file.name}`, "7tv");
+            }
           }
+        } catch (error) {
+          console.warn("[TwitchLite] 7TV channel emotes failed:", error);
         }
-      } catch (error) {
-        console.warn("[TwitchLite] 7TV channel emotes failed:", error);
       }
     }
-
     const providerCounts = {
       "7tv": 0,
       bttv: 0,
