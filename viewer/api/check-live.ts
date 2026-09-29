@@ -110,6 +110,7 @@ export default async function handler(req: any, res: any) {
       return res.status(200).json({
         channel: user.login,
         displayName: user.display_name,
+        userId: user.id,
         exists: true,
         live: false,
       });
@@ -118,6 +119,7 @@ export default async function handler(req: any, res: any) {
     return res.status(200).json({
       channel: stream.user_login,
       displayName: stream.user_name,
+      userId: user.id,
       exists: true,
       live: true,
       title: stream.title,

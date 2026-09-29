@@ -32,6 +32,9 @@ function App() {
   const channel = path.split("/")[1];
   const params = new URLSearchParams(window.location.search);
   const mode = params.get("mode") ?? "lite";
+
+  const [twitchId, setTwitchId] = useState<string | null>(null);
+
   const chatParams = new URLSearchParams({
     parent: window.location.hostname,
     mode,
@@ -54,6 +57,10 @@ function App() {
     chatParams.set("bttv", params.get("bttv") ?? "1");
     chatParams.set("ffz", params.get("ffz") ?? "1");
     chatParams.set("quality", params.get("quality") ?? "2x");
+  }
+
+  if (twitchId) {
+    chatParams.set("twitchId", twitchId);
   }
 
   const playerUrl = `https://player.twitch.tv/?channel=${channel}&parent=${window.location.hostname}`;
@@ -81,6 +88,7 @@ function App() {
         }
 
         const data = await response.json();
+        setTwitchId(data.userId ?? null);
 
         if (!data.exists) {
           setChannelStatus("not-found");

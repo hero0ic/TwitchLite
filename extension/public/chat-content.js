@@ -62,23 +62,12 @@
   const bttvSize = settings.emoteQuality === "1x" ? "1x" : "2x";
   const sevenTvSize = settings.emoteQuality === "1x" ? "1x.webp" : "2x.webp";
 
-  let twitchId = "";
+  const twitchId = chatParams.get("twitchId") ?? "";
 
-  try {
-    const twitchIdResponse = await fetch(
-      `https://twitchlite.app/api/channel-id?channel=${encodeURIComponent(channel)}`,
-    );
-
-    if (twitchIdResponse.ok) {
-      const twitchIdData = await twitchIdResponse.json();
-      twitchId = String(twitchIdData.id ?? "");
-    } else {
-      console.warn(
-        `[TwitchLite] Twitch ID lookup failed: ${twitchIdResponse.status}`,
-      );
-    }
-  } catch (error) {
-    console.warn("[TwitchLite] Twitch ID lookup failed:", error);
+  if (twitchId) {
+    console.log(`[TwitchLite] Twitch ID: ${twitchId}`);
+  } else {
+    console.warn("[TwitchLite] No Twitch ID provided");
   }
 
   if (twitchId) {
