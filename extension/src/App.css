@@ -150,6 +150,37 @@ input[type="checkbox"] {
   font-weight: 700;
 }
 
+.mode-summary li.memory-saving {
+  margin-top: 4px;
+  color: #bf94ff;
+  font-weight: 600;
+}
+
+.memory-disclaimer {
+  margin: 10px 0 0;
+  color: #71717a;
+  font-size: 0.65rem;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.benchmark-disclaimer-link {
+  color: #a970ff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.benchmark-disclaimer-link:hover {
+  color: #bf94ff;
+}
+
+.custom-memory {
+  margin: 8px 0 0;
+  color: #bf94ff;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
 .custom-summary {
   margin: 0;
 

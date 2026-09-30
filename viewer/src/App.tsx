@@ -33,6 +33,27 @@ function App() {
   const params = new URLSearchParams(window.location.search);
   const mode = params.get("mode") ?? "lite";
 
+  const benchmarkData = [
+    {
+      mode: "Twitch",
+      values: ["1.2 GB", "1.2 GB", "1.4 GB", "1.5 GB", "1.4 GB", "1.5 GB"],
+      average: "1.37 GB",
+      savings: null,
+    },
+    {
+      mode: "Lite",
+      values: ["649 MB", "631 MB", "677 MB", "726 MB", "827 MB", "750 MB"],
+      average: "710 MB",
+      savings: "48% less",
+    },
+    {
+      mode: "Balanced",
+      values: ["812 MB", "821 MB", "832 MB", "830 MB", "816 MB", "832 MB"],
+      average: "824 MB",
+      savings: "40% less",
+    },
+  ];
+
   const [twitchId, setTwitchId] = useState<string | null>(null);
 
   const chatParams = new URLSearchParams({
@@ -79,6 +100,10 @@ function App() {
     if (path === "/welcome") {
       document.title = "Welcome to TwitchLite";
       return;
+    }
+
+    if (path === "/benchmark") {
+      document.title = "Memory Benchmark | TwitchLite";
     }
 
     if (!channel) {
@@ -441,6 +466,7 @@ function App() {
                   <li>Chat</li>
                   <li>Theater mode</li>
                   <li>7TV, BTTV, and FFZ emotes</li>
+                  <li>~48-55% less memory usage*</li>
                 </ul>
               </article>
 
@@ -459,6 +485,7 @@ function App() {
                   <li>Channel search</li>
                   <li>Followed live channels</li>
                   <li>Higher-quality emotes</li>
+                  <li>~40% less memory usage</li>
                 </ul>
               </article>
 
@@ -479,7 +506,12 @@ function App() {
                 </ul>
               </article>
             </div>
-
+            <p className="section-description">
+              *Memory usage is based on benchmark testing. Results may vary.
+            </p>
+            <a href="/benchmark" className="benchmark-link">
+              See our memory benchmark →
+            </a>
             <a
               href="#emotes"
               className="section-arrow section-arrow-down"
@@ -543,6 +575,166 @@ function App() {
             </div>
           </div>
         </section>
+      </main>
+    );
+  }
+
+  if (path === "/benchmark") {
+    return (
+      <main className="benchmark-page">
+        <div className="benchmark-container">
+          <a href="/" className="benchmark-back">
+            ← Back to TwitchLite
+          </a>
+
+          <section className="benchmark-hero">
+            <p className="section-eyebrow">MEMORY BENCHMARK</p>
+
+            <h1>Benchmark Results.</h1>
+
+            <p className="benchmark-intro">
+              We compared TwitchLite against the standard Twitch website.
+              Results are based on a controlled test. See more details below.
+            </p>
+          </section>
+
+          <section className="benchmark-results">
+            <div className="benchmark-result-card twitch-result">
+              <span className="benchmark-label">Standard Twitch</span>
+              <strong>1.37 GB</strong>
+              <span className="benchmark-subtext">average memory usage</span>
+
+              <div className="memory-bar">
+                <div className="memory-fill twitch-bar" />
+              </div>
+            </div>
+
+            <div className="benchmark-result-card">
+              <span className="benchmark-label">TwitchLite (Balanced)</span>
+              <strong>824 MB</strong>
+              <span className="benchmark-saving">40% less</span>
+
+              <div className="memory-bar">
+                <div className="memory-fill balanced-bar" />
+              </div>
+            </div>
+
+            <div className="benchmark-result-card">
+              <span className="benchmark-label">TwitchLite (Lite)</span>
+              <strong>710 MB</strong>
+              <span className="benchmark-saving">48% less</span>
+
+              <div className="memory-bar">
+                <div className="memory-fill lite-bar" />
+              </div>
+            </div>
+          </section>
+
+          <section className="benchmark-section">
+            <div className="benchmark-section-header">
+              <p className="section-eyebrow">RESULTS OVER TIME</p>
+              <h2>30-minute timeline</h2>
+            </div>
+
+            <div className="benchmark-table-wrapper">
+              <table className="benchmark-table">
+                <thead>
+                  <tr>
+                    <th>Mode</th>
+                    <th>5 min</th>
+                    <th>10 min</th>
+                    <th>15 min</th>
+                    <th>20 min</th>
+                    <th>25 min</th>
+                    <th>30 min</th>
+                    <th>Average</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  {benchmarkData.map((result) => (
+                    <tr key={result.mode}>
+                      <td>
+                        <strong>{result.mode}</strong>
+                      </td>
+
+                      {result.values.map((value, index) => (
+                        <td key={index}>{value}</td>
+                      ))}
+
+                      <td>
+                        <strong>{result.average}</strong>
+                        {result.savings && (
+                          <span className="table-saving">{result.savings}</span>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section className="benchmark-section benchmark-methodology">
+            <div>
+              <p className="section-eyebrow">METHODOLOGY</p>
+              <h2>How we tested</h2>
+            </div>
+
+            <div className="methodology-grid">
+              <div>
+                <span>Duration</span>
+                <strong>30 minutes per mode</strong>
+              </div>
+
+              <div>
+                <span>Stream Details</span>
+                <strong>Channel: xQc, Quality: 1080p</strong>
+              </div>
+
+              <div>
+                <span>Browser</span>
+                <strong>Google Chrome</strong>
+              </div>
+
+              <div>
+                <span>Environment</span>
+                <strong>Same local machine</strong>
+              </div>
+            </div>
+
+            <p className="benchmark-note">
+              Memory usage naturally varies based on stream quality, chat
+              activity, animated emotes, browser extensions, advertisements,
+              hardware, and other browser activity. These results represent one
+              controlled local test and should not be interpreted as guaranteed
+              memory usage for every viewer.
+            </p>
+          </section>
+
+          <section className="benchmark-section benchmark-observation">
+            <p className="section-eyebrow">WHAT WE LEARNED</p>
+
+            <h2>Chat activity matters.</h2>
+
+            <p>
+              Through our tests we determined the main culprit of memory
+              fluctations to be <strong>Twitch chat volume</strong>. In
+              specific, periods of heavy emote usage caused noticeable memory
+              increases.
+            </p>
+            <p>
+              Lite mode increased toward the end of its test due to an unusally
+              high amount of emotes being spammed.
+            </p>
+
+            <p>
+              Even with those fluctuations, both TwitchLite modes used
+              substantially less memory on average than the standard Twitch
+              website during this test.
+            </p>
+          </section>
+        </div>
       </main>
     );
   }

@@ -242,7 +242,7 @@ function App() {
                 <li>Stream + Chat</li>
                 <li>7TV, BTTV & FFZ</li>
                 <li>1x Emote Quality</li>
-                <li>Lowest resource usage</li>
+                <li className="memory-saving">~48-55% less memory*</li>
               </ul>
             )}
 
@@ -253,6 +253,7 @@ function App() {
                 <li>Followed Channels</li>
                 <li>7TV, BTTV & FFZ</li>
                 <li>2x Emote Quality</li>
+                <li className="memory-saving">~40% less memory*</li>
               </ul>
             )}
 
@@ -262,6 +263,19 @@ function App() {
               </p>
             )}
           </div>
+
+          <p className="memory-disclaimer">
+            *Memory usage is based on{" "}
+            <a
+              href="https://twitchlite.app/benchmark"
+              target="_blank"
+              rel="noreferrer"
+              className="benchmark-disclaimer-link"
+            >
+              benchmark testing
+            </a>
+            . Results may vary.
+          </p>
 
           {mode === "custom" && (
             <div className="custom-settings">

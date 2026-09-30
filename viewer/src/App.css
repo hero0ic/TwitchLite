@@ -947,6 +947,257 @@ html {
   }
 }
 
+/* Benchmark Page */
+
+.benchmark-page {
+  min-height: 100vh;
+  background: #0e0e10;
+  color: #efeff1;
+  padding: 64px 24px 100px;
+}
+
+.benchmark-container {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+}
+
+.benchmark-back {
+  display: inline-block;
+  margin-bottom: 72px;
+  color: #adadb8;
+  font-size: 0.82rem;
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+
+.benchmark-back:hover {
+  color: #fff;
+}
+
+.benchmark-hero {
+  max-width: 760px;
+  margin-bottom: 64px;
+}
+
+.benchmark-hero h1 {
+  margin: 10px 0 18px;
+  color: #fff;
+  font-size: clamp(2.5rem, 6vw, 4.8rem);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+.benchmark-intro {
+  max-width: 660px;
+  color: #adadb8;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.benchmark-results {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 96px;
+}
+
+.benchmark-result-card {
+  padding: 24px;
+  background: #18181b;
+  border: 1px solid #2a2a2e;
+  border-radius: 12px;
+}
+
+.benchmark-label {
+  display: block;
+  margin-bottom: 18px;
+  color: #adadb8;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.benchmark-result-card strong {
+  display: block;
+  color: #fff;
+  font-size: 2rem;
+  letter-spacing: -0.04em;
+}
+
+.benchmark-subtext,
+.benchmark-saving {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.78rem;
+}
+
+.benchmark-subtext {
+  color: #8f8f98;
+}
+
+.benchmark-saving {
+  color: #bf94ff;
+  font-weight: 600;
+}
+
+.memory-bar {
+  width: 100%;
+  height: 5px;
+  margin-top: 24px;
+  overflow: hidden;
+  background: #2a2a2e;
+  border-radius: 999px;
+}
+
+.memory-fill {
+  height: 100%;
+  background: #9147ff;
+  border-radius: inherit;
+}
+
+.twitch-bar {
+  width: 100%;
+  background: #a51a1a;
+}
+
+.lite-bar {
+  width: 52%;
+  background: #14bd30;
+}
+
+.balanced-bar {
+  width: 60%;
+  background: #9fdd2d;
+}
+
+.benchmark-section {
+  padding: 72px 0;
+  border-top: 1px solid #242429;
+}
+
+.benchmark-section-header {
+  margin-bottom: 28px;
+}
+
+.benchmark-section h2 {
+  margin: 8px 0 0;
+  color: #fff;
+  font-size: 2rem;
+  letter-spacing: -0.04em;
+}
+
+.benchmark-table-wrapper {
+  overflow-x: auto;
+}
+
+.benchmark-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.84rem;
+}
+
+.benchmark-table th,
+.benchmark-table td {
+  padding: 16px 14px;
+  border-bottom: 1px solid #242429;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.benchmark-table th {
+  color: #8f8f98;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.benchmark-table td {
+  color: #cfcfd4;
+}
+
+.benchmark-table td:first-child,
+.benchmark-table td:last-child {
+  color: #efeff1;
+}
+
+.table-saving {
+  display: block;
+  margin-top: 3px;
+  color: #a970ff;
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.methodology-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 32px;
+}
+
+.methodology-grid > div {
+  padding: 18px;
+  background: #141417;
+  border: 1px solid #242429;
+  border-radius: 8px;
+}
+
+.methodology-grid span {
+  display: block;
+  margin-bottom: 6px;
+  color: #8f8f98;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.methodology-grid strong {
+  color: #efeff1;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.benchmark-note {
+  max-width: 800px;
+  margin-top: 24px;
+  color: #777780;
+  font-size: 0.76rem;
+  line-height: 1.6;
+}
+
+.benchmark-observation {
+  max-width: 760px;
+}
+
+.benchmark-observation p:not(.section-eyebrow) {
+  color: #adadb8;
+  line-height: 1.75;
+}
+
+@media (max-width: 800px) {
+  .benchmark-results {
+    grid-template-columns: 1fr;
+  }
+
+  .methodology-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .benchmark-page {
+    padding: 40px 16px 72px;
+  }
+
+  .benchmark-back {
+    margin-bottom: 48px;
+  }
+
+  .methodology-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* STATUS PAGES */
 .status-page {
   min-height: 100vh;
