@@ -121,7 +121,7 @@ textarea {
 
   padding: 18px 20px;
 
-  background: rgba(24, 24, 27, 0.75);
+  background: #18181bbf;
 
   border: 1px solid #29292e;
   border-radius: 10px;
@@ -1195,6 +1195,99 @@ html {
 
   .methodology-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+/* Privacy Policy */
+.privacy-page {
+  min-height: 100vh;
+  background: #0e0e10;
+  color: #efeff1;
+  padding: 64px 24px 100px;
+}
+
+.privacy-container {
+  width: min(860px, 100%);
+  margin: 0 auto;
+}
+
+.privacy-back {
+  display: inline-block;
+  margin-bottom: 72px;
+  color: #adadb8;
+  font-size: 0.82rem;
+  text-decoration: none;
+  transition: color 120ms ease;
+}
+
+.privacy-back:hover {
+  color: #fff;
+}
+
+.privacy-hero {
+  margin-bottom: 56px;
+}
+
+.privacy-hero h1 {
+  margin: 10px 0 12px;
+  color: #fff;
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  line-height: 1;
+  letter-spacing: -0.055em;
+}
+
+.privacy-updated {
+  margin: 0;
+  color: #777780;
+  font-size: 0.8rem;
+}
+
+.privacy-content section {
+  padding: 36px 0;
+  border-top: 1px solid #242429;
+}
+
+.privacy-content h2 {
+  margin: 0 0 18px;
+  color: #fff;
+  font-size: 1.3rem;
+  letter-spacing: -0.025em;
+}
+
+.privacy-content p {
+  max-width: 760px;
+  margin: 0 0 16px;
+  color: #adadb8;
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+
+.privacy-content p:last-child {
+  margin-bottom: 0;
+}
+
+.privacy-content a {
+  color: #a970ff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.privacy-content a:hover {
+  color: #bf94ff;
+}
+
+.privacy-disclaimer p {
+  color: #777780;
+  font-size: 0.78rem;
+}
+
+@media (max-width: 500px) {
+  .privacy-page {
+    padding: 40px 16px 72px;
+  }
+
+  .privacy-back {
+    margin-bottom: 48px;
   }
 }
 
