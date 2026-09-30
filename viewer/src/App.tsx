@@ -393,8 +393,8 @@ function App() {
             <h1>TwitchLite</h1>
 
             <p className="hero-description">
-              Watch Twitch with the stream, chat, emotes, and features you want
-              — without the rest of the Twitch interface.
+              A lightweight viewer focused on reducing unnecessary browser
+              resource usage. .
             </p>
 
             <div className="landing-actions">
