@@ -71,6 +71,35 @@ function App() {
   >("loading");
 
   useEffect(() => {
+    if (path === "/") {
+      document.title = "TwitchLite";
+      return;
+    }
+
+    if (path === "/welcome") {
+      document.title = "Welcome to TwitchLite";
+      return;
+    }
+
+    if (!channel) {
+      document.title = "TwitchLite";
+      return;
+    }
+
+    if (channelStatus === "offline") {
+      document.title = `${channel} is offline | TwitchLite`;
+      return;
+    }
+
+    if (channelStatus === "not-found" || channelStatus === "error") {
+      document.title = "TwitchLite";
+      return;
+    }
+
+    document.title = `${channel} | TwitchLite`;
+  }, [path, channel, channelStatus]);
+
+  useEffect(() => {
     const checkChannel = async () => {
       if (!channel) {
         return;
