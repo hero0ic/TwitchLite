@@ -104,6 +104,7 @@ function App() {
 
     if (path === "/benchmark") {
       document.title = "Memory Benchmark | TwitchLite";
+      return;
     }
 
     if (!channel) {
