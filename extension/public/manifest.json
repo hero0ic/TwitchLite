@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "TwitchLite",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A lightweight Twitch viewer focused on reducing unnecessary browser resource usage.",
   "permissions": ["activeTab", "storage"],
   "action": {
