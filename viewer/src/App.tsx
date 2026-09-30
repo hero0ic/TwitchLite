@@ -398,8 +398,9 @@ function App() {
             <h1>TwitchLite</h1>
 
             <p className="hero-description">
-              A lightweight viewer focused on reducing unnecessary browser
-              resource usage. .
+              A lightweight, customizable viewer focused on reducing unnecessary
+              browser resource usage and providing a minimal, distraction-free
+              interface.
             </p>
 
             <div className="landing-actions">
