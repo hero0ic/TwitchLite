@@ -107,6 +107,11 @@ function App() {
       return;
     }
 
+    if (path === "/privacy") {
+      document.title = "Privacy Policy | TwitchLite";
+      return;
+    }
+
     if (!channel) {
       document.title = "TwitchLite";
       return;
