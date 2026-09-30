@@ -740,6 +740,145 @@ function App() {
     );
   }
 
+  if (path === "/privacy") {
+    return (
+      <main className="privacy-page">
+        <div className="privacy-container">
+          <a href="/" className="privacy-back">
+            ← Back to TwitchLite
+          </a>
+
+          <header className="privacy-hero">
+            <p className="section-eyebrow">PRIVACY</p>
+            <h1>Privacy Policy</h1>
+            <p className="privacy-updated">Last updated: September 30, 2026</p>
+          </header>
+
+          <div className="privacy-content">
+            <section>
+              <p>
+                TwitchLite is a lightweight Twitch viewer designed to provide a
+                minimal and resource-efficient Twitch viewing experience.
+              </p>
+            </section>
+
+            <section>
+              <h2>Information TwitchLite Uses</h2>
+
+              <p>
+                TwitchLite does not sell user data or use user data for
+                advertising.
+              </p>
+
+              <p>
+                If you choose to connect your Twitch account, TwitchLite
+                receives a Twitch OAuth access token. This token is used to
+                authenticate requests directly with Twitch's API so TwitchLite
+                can retrieve information required for features such as your
+                followed live channels.
+              </p>
+
+              <p>
+                The Twitch OAuth access token is stored locally in your browser
+                and is not sent to or stored on TwitchLite's servers.
+              </p>
+
+              <p>
+                TwitchLite may temporarily process Twitch account information
+                returned by Twitch's API, such as your Twitch user ID, when
+                necessary to request your followed live streams. This
+                information is used to provide the requested functionality and
+                is not stored by TwitchLite on its servers.
+              </p>
+            </section>
+
+            <section>
+              <h2>Local Storage</h2>
+
+              <p>
+                TwitchLite stores certain preferences locally in your browser,
+                such as viewing mode and customization settings, so your
+                preferences can persist between sessions.
+              </p>
+            </section>
+
+            <section>
+              <h2>Third-Party Services</h2>
+
+              <p>
+                TwitchLite communicates with Twitch and third-party emote
+                services, including 7TV, BetterTTV, and FrankerFaceZ, to provide
+                streaming, Twitch account features, and third-party emotes.
+                Requests to these services are subject to their respective
+                privacy practices.
+              </p>
+            </section>
+
+            <section>
+              <h2>Data Sharing</h2>
+
+              <p>
+                TwitchLite does not sell, rent, or transfer user data to third
+                parties for advertising or marketing purposes. Information is
+                transmitted to third-party services only as necessary to provide
+                TwitchLite's functionality.
+              </p>
+            </section>
+
+            <section>
+              <h2>Data Retention</h2>
+
+              <p>
+                TwitchLite does not maintain a server-side database of Twitch
+                OAuth tokens or Twitch account information. Locally stored
+                information remains in the user's browser until it is removed
+                through the application, browser storage, or other applicable
+                browser controls.
+              </p>
+            </section>
+
+            <section>
+              <h2>Security</h2>
+
+              <p>
+                TwitchLite limits access to user information to what is
+                necessary to provide its features. Twitch authentication is
+                handled through Twitch's OAuth system, and TwitchLite does not
+                receive or store your Twitch password.
+              </p>
+            </section>
+
+            <section>
+              <h2>Changes to This Policy</h2>
+
+              <p>
+                This privacy policy may be updated if TwitchLite's features or
+                data practices change. Any updates will be reflected on this
+                page with a revised date.
+              </p>
+            </section>
+
+            <section>
+              <h2>Contact</h2>
+
+              <p>
+                Questions about this privacy policy can be directed to{" "}
+                <a href="mailto:this_email">heroicgorilla@gmail.com</a>.
+              </p>
+            </section>
+
+            <section className="privacy-disclaimer">
+              <p>
+                TwitchLite is an independent project and is not affiliated with
+                or endorsed by Twitch.
+              </p>
+            </section>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   if (channel && channelStatus === "loading") {
     return (
       <main className="status-page">
