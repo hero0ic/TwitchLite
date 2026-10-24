@@ -406,6 +406,7 @@ function App() {
             <div className="landing-actions">
               <a
                 href="https://chromewebstore.google.com/detail/twitchlite/pfkghnmijlkpphkicegnbfnkaebkkgia?authuser=0&hl=en"
+                target="_blank"
                 className="primary-button"
               >
                 Add to Chrome
