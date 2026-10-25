@@ -475,7 +475,6 @@ function App() {
                 <ul>
                   <li>Stream</li>
                   <li>Chat</li>
-                  <li>Theater mode</li>
                   <li>7TV, BTTV, and FFZ emotes</li>
                   <li>~48-55% less memory usage*</li>
                 </ul>
@@ -493,6 +492,7 @@ function App() {
 
                 <ul>
                   <li>Everything in Lite</li>
+                  <li>Theater mode</li>
                   <li>Channel search</li>
                   <li>Followed live channels</li>
                   <li>Higher-quality emotes</li>
@@ -1013,7 +1013,11 @@ function App() {
           </form>
         </header>
       )}
-      <div className={theaterMode ? "viewer theater" : "viewer"}>
+      <div
+        className={`viewer ${theaterMode ? "theater" : ""} ${
+          mode === "lite" ? "viewer-lite" : ""
+        }`}
+      >
         {showFollowing && !theaterMode && (
           <aside className="following-sidebar">
             <h3>Followed Channels</h3>
@@ -1051,14 +1055,16 @@ function App() {
           <div className="video">
             <iframe src={playerUrl} allowFullScreen></iframe>
           </div>
-          <button
-            className="theater-button"
-            type="button"
-            aria-pressed={theaterMode}
-            onClick={changeDisplayMode}
-          >
-            {theaterMode ? "Exit Theater" : "Theater Mode"}
-          </button>
+          {(showSearch || showFollowing) && (
+            <button
+              className="theater-button"
+              type="button"
+              aria-pressed={theaterMode}
+              onClick={changeDisplayMode}
+            >
+              {theaterMode ? "Exit Theater" : "Theater Mode"}
+            </button>
+          )}
         </div>
         {showChat && (
           <div className="chat">
