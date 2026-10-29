@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { FaGithub } from "react-icons/fa";
+import { Mail, Sun, Moon } from "lucide-react";
 import "./App.css";
 
 type ViewingMode = "lite" | "balanced" | "custom";
@@ -26,6 +28,13 @@ const defaultCustomSettings: CustomSettings = {
 function App() {
   const [channel, setChannel] = useState<string | null>(null);
   const [mode, setMode] = useState<ViewingMode>("lite");
+  const [popupTheme, setPopupTheme] = useState<"dark" | "light">("dark");
+  const togglePopupTheme = () => {
+    const next = popupTheme === "dark" ? "light" : "dark";
+
+    setPopupTheme(next);
+    chrome.storage.sync.set({ popupTheme: next });
+  };
   const [customSettings, setCustomSettings] = useState<CustomSettings>(
     defaultCustomSettings,
   );
@@ -117,9 +126,35 @@ function App() {
     });
   };
 
+  function PopupFooter() {
+    return (
+      <footer className="popup-footer">
+        <a
+          href="https://github.com/hero0ic/TwitchLite"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FaGithub size={14} />
+          GitHub
+        </a>
+
+        <a href="mailto:heroicgorilla@gmail.com?subject=TwitchLite%20Feedback">
+          <Mail size={14} strokeWidth={1.8} />
+          Contact
+        </a>
+      </footer>
+    );
+  }
+
   useEffect(() => {
     const loadSettings = async () => {
-      const result = await chrome.storage.sync.get(["mode", "customSettings"]);
+      const result = await chrome.storage.sync.get([
+        "mode",
+        "customSettings",
+        "popupTheme",
+      ]);
+
+      setPopupTheme(result.popupTheme === "light" ? "light" : "dark");
 
       if (
         result.mode === "lite" ||
@@ -193,8 +228,20 @@ function App() {
 
   const selectedChannel = checkedChannel ?? channel;
   return (
-    <main>
-      <h1>TwitchLite</h1>
+    <main data-theme={popupTheme}>
+      <header className="popup-header">
+        <h1>TwitchLite</h1>
+
+        <button
+          type="button"
+          className="theme-toggle"
+          onClick={togglePopupTheme}
+          aria-label="Toggle popup theme"
+          title="Toggle popup theme"
+        >
+          {popupTheme === "dark" ? <Sun size={17} /> : <Moon size={17} />}
+        </button>
+      </header>
 
       {selectedChannel ? (
         <>
@@ -420,6 +467,7 @@ function App() {
           </div>
         </>
       )}
+      <PopupFooter />
     </main>
   );
 }
