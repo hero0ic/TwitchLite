@@ -586,6 +586,12 @@ function App() {
             </div>
           </div>
         </section>
+
+        <footer className="landing-footer">
+          <a href="/privacy" className="privacy-link">
+            Privacy Policy
+          </a>
+        </footer>
       </main>
     );
   }
@@ -873,7 +879,10 @@ function App() {
 
               <p>
                 Questions about this privacy policy can be directed to{" "}
-                <a href="mailto:this_email">heroicgorilla@gmail.com</a>.
+                <a href="mailto:heroicgorilla@gmail.com">
+                  heroicgorilla@gmail.com
+                </a>
+                .
               </p>
             </section>
 

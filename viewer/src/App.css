@@ -345,6 +345,36 @@ html {
   color: #73737d;
 }
 
+.landing-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px 20px;
+
+  background: #0e0e10;
+  border-top: 1px solid #242429;
+}
+
+.privacy-link {
+  color: #73737d;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+
+  transition: color 150ms ease;
+}
+
+.privacy-link:hover {
+  color: #a970ff;
+}
+
+.privacy-link:focus-visible {
+  outline: 2px solid #9147ff;
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
 .section-arrow {
   position: absolute;
   left: 50%;
